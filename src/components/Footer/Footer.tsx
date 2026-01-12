@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import "./footer.css";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -91,7 +92,7 @@ const Footer = () => {
           <div className="content-footer-top">
             <div className="footer-logo">
               <Link href="/">
-                <img
+                <Image
                   src="/images/logo-white.svg"
                   alt="logo"
                   width={226}

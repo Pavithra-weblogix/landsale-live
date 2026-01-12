@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Land Sales",
-  description: "",
+  description: "Find land for sale across Australia at Land Sales.",
 };
 
 export default function RootLayout({
