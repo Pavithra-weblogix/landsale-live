@@ -796,15 +796,15 @@
   overflow-y: auto;
 }
 
-.mobile-menu-visible {
+.mobile-menu.open {
   overflow: hidden;
 }
 
-.mobile-menu-visible .mobile-menu {
+.mobile-menu.open {
   visibility: visible;
 }
 
-.mobile-menu-visible .mobile-menu .menu-backdrop {
+.mobile-menu.open .menu-backdrop {
   opacity: 1;
   visibility: visible;
   -webkit-transition: all 0.3s ease;
@@ -814,7 +814,7 @@
   transition: all 0.3s ease;
 }
 
-.mobile-menu-visible .mobile-menu .menu-box {
+.mobile-menu.open .menu-box {
   left: 0px;
   -webkit-overflow-scrolling: touch;
   -webkit-transition-duration: 0.3s;
@@ -876,7 +876,7 @@
   font-weight: 100;
 }
 
-.mobile-menu-visible .close-btn {
+.mobile-menu.open .close-btn {
   visibility: visible;
   opacity: 1;
 }
@@ -1376,4 +1376,26 @@
   margin-bottom: 19px;
   border-bottom: 1px solid #e4e4e4;
   padding-bottom: 19px;
+}
+
+
+@media only screen and (max-width: 767px) { 
+  .main-header .main-menu {
+    display: none;
+}
+.mobile-button {
+    display: block !important;
+}
+.mobile-button::before, .mobile-button::after, .mobile-button span {
+    background: #fff;
+}
+.main-header .logo-box .logo img {
+    height: 50px;
+}
+.state-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    display: grid;
+}
+
 }
