@@ -1,14 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./header.css";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isFixed, setIsFixed] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsFixed(true);
+      } else {
+        setIsFixed(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header id="header" className="main-header header-fixed fixed-header">
+    <header
+      id="header"
+      className={`main-header header-fixed fixed-header ${
+        isFixed ? "is-fixed" : ""
+      }`}
+    >
       <div className="container">
         <div className="header-lower">
           <div className="row">
@@ -98,7 +117,7 @@ const Header = () => {
             <div className="nav-logo">
               <Link href="/">
                 <Image
-                  src="/images/logo/logo.svg"
+                  src="/images/logo.svg"
                   alt="nav-logo"
                   width={174}
                   height={44}

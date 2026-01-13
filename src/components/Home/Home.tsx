@@ -30,7 +30,7 @@ export const Home = () => {
                   <button className="btn-primary">Search Land</button>
                 </div>
 
-                <div className="banner_keyword">
+                <div className="banner_keyword hidden-xs">
                   <ul>
                     <li>Verified Developers</li>
                     <li>Direct Enquires</li>
@@ -115,8 +115,8 @@ export const Home = () => {
             spaceBetween={10}
             slidesPerView={4}
             breakpoints={{
-              0: { slidesPerView: 2 },
-              576: { slidesPerView: 3 },
+              0: { slidesPerView: 1 },
+              576: { slidesPerView: 1 },
               992: { slidesPerView: 4 },
             }}
             className="tf-sw-categories"
