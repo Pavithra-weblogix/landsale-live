@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Thumbs } from "swiper/modules";
 
 import "swiper/css";
@@ -9,8 +10,8 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import "./estate.css";
 
-const EverdeneEstatePage = () => {
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+const Estate = () => {
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
     const heroImages = ["land1.jpg", "land2.jpg", "land3.jpg", "land4.jpg"];
 
@@ -236,4 +237,4 @@ const EverdeneEstatePage = () => {
     );
 };
 
-export default EverdeneEstatePage;
+export default Estate;

@@ -10,20 +10,20 @@ import "./state.css";
 
 const State = () => {
     const [expanded, setExpanded] = useState(false);
-    const wrapperRef = useRef(null);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (e) => {
-            if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
                 setOpenDropdown(null);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-    const [openDropdown, setOpenDropdown] = useState(null);
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
-    const toggleDropdown = (name) => {
+    const toggleDropdown = (name: string) => {
         setOpenDropdown(openDropdown === name ? null : name);
     };
     const landData = [
