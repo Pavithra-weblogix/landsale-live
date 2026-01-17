@@ -1,11 +1,18 @@
+"use client";
 import Link from "next/link";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./home.css";
+import { BlogListResponse } from "@/types/blog";
+import { formatDate } from "@/lib/utils/formatDate";
 
-export const Home = () => {
- return(
- <>
+type HomeProps = {
+  blogs: BlogListResponse;
+};
+
+export const Home = ({ blogs }: HomeProps) => {
+  return (
+    <>
       {/* HERO SEARCH */}
       <section className="flat-slider home-1 home_new">
         <div className="container relative">
@@ -48,9 +55,7 @@ export const Home = () => {
       {/* BROWSE BY STATE */}
       <section className="flat-section flat-categories">
         <div className="container">
-          <h2 className="section-title text-center">
-            Browse Land by State
-          </h2>
+          <h2 className="section-title text-center">Browse Land by State</h2>
 
           <div className="state-grid">
             {[
@@ -106,109 +111,109 @@ export const Home = () => {
             <h3 className="title mt-4">Newest Land Listings</h3>
           </div>
           <div className="wrap-categories-sw">
-          <Swiper
-            modules={[Navigation]}
-            navigation={{
-              nextEl: ".nav-prev-category",
-              prevEl: ".nav-next-category",
-            }}
-            spaceBetween={10}
-            slidesPerView={4}
-            breakpoints={{
-              0: { slidesPerView: 1 },
-              576: { slidesPerView: 1 },
-              992: { slidesPerView: 4 },
-            }}
-            className="tf-sw-categories"
-          >
-            {[
-              {
-                title: "Lake Narracan Estate",
-                location: "Moe, VIC",
-                price: "$900,000",
-                size: "512 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-              },
-              {
-                title: "Evergreen Park",
-                location: "Logan, QLD",
-                price: "$310,000",
-                size: "122 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-              },
-              {
-                title: "Alkina",
-                location: "Mickleham, VIC",
-                price: "$535,000",
-                size: "572 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-              },
-              {
-                title: "Golden Grove Estate",
-                location: "Wattle Grove, WA",
-                price: "$705,000",
-                size: "170 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-              },
-              {
-                title: "Lake Narracan Estate",
-                location: "Moe, VIC",
-                price: "$900,000",
-                size: "512 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-              },
-              {
-                title: "Evergreen Park",
-                location: "Logan, QLD",
-                price: "$310,000",
-                size: "122 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-              },
-              {
-                title: "Alkina",
-                location: "Mickleham, VIC",
-                price: "$535,000",
-                size: "572 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-              },
-              {
-                title: "Golden Grove Estate",
-                location: "Wattle Grove, WA",
-                price: "$705,000",
-                size: "170 sqm",
-                img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-              },
-            ].map((item, i) => (
-              <SwiperSlide key={i}>
-                <Link href="/" className="homelengo-categories">
-                  <div className="listing-card">
-                    <div className="image_card">
-                      <img src={item.img} alt={item.title} />
-                    </div>
-                    <div className="info_content">
-                      <h4>{item.title}</h4>
-                      <p className="location">
-                        <i className="icon icon-mapPin"></i> {item.location}
-                      </p>
-                      <div className="price">
-                        <span className="price_data">{item.price}</span>
-                        <span className="sqft_data">
-                          <i className="icon icon-sqft"></i> {item.size}
-                        </span>
+            <Swiper
+              modules={[Navigation]}
+              navigation={{
+                nextEl: ".nav-prev-category",
+                prevEl: ".nav-next-category",
+              }}
+              spaceBetween={10}
+              slidesPerView={4}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                576: { slidesPerView: 1 },
+                992: { slidesPerView: 4 },
+              }}
+              className="tf-sw-categories"
+            >
+              {[
+                {
+                  title: "Lake Narracan Estate",
+                  location: "Moe, VIC",
+                  price: "$900,000",
+                  size: "512 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
+                },
+                {
+                  title: "Evergreen Park",
+                  location: "Logan, QLD",
+                  price: "$310,000",
+                  size: "122 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
+                },
+                {
+                  title: "Alkina",
+                  location: "Mickleham, VIC",
+                  price: "$535,000",
+                  size: "572 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
+                },
+                {
+                  title: "Golden Grove Estate",
+                  location: "Wattle Grove, WA",
+                  price: "$705,000",
+                  size: "170 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
+                },
+                {
+                  title: "Lake Narracan Estate",
+                  location: "Moe, VIC",
+                  price: "$900,000",
+                  size: "512 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
+                },
+                {
+                  title: "Evergreen Park",
+                  location: "Logan, QLD",
+                  price: "$310,000",
+                  size: "122 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
+                },
+                {
+                  title: "Alkina",
+                  location: "Mickleham, VIC",
+                  price: "$535,000",
+                  size: "572 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
+                },
+                {
+                  title: "Golden Grove Estate",
+                  location: "Wattle Grove, WA",
+                  price: "$705,000",
+                  size: "170 sqm",
+                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
+                },
+              ].map((item, i) => (
+                <SwiperSlide key={i}>
+                  <Link href="/" className="homelengo-categories">
+                    <div className="listing-card">
+                      <div className="image_card">
+                        <img src={item.img} alt={item.title} />
                       </div>
-                      <div className="buttons">
-                        <button className="btn-primary">View Estate</button>
-                        <button className="btn-outline">Enquire</button>
+                      <div className="info_content">
+                        <h4>{item.title}</h4>
+                        <p className="location">
+                          <i className="icon icon-mapPin"></i> {item.location}
+                        </p>
+                        <div className="price">
+                          <span className="price_data">{item.price}</span>
+                          <span className="sqft_data">
+                            <i className="icon icon-sqft"></i> {item.size}
+                          </span>
+                        </div>
+                        <div className="buttons">
+                          <button className="btn-primary">View Estate</button>
+                          <button className="btn-outline">Enquire</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                  </Link>
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-          <div className="nav-prev-category swiper-button-next round-toggle"></div>
-          <div className="nav-next-category swiper-button-prev round-toggle"></div>
+            <div className="nav-prev-category swiper-button-next round-toggle"></div>
+            <div className="nav-next-category swiper-button-prev round-toggle"></div>
           </div>
         </div>
       </section>
@@ -263,162 +268,28 @@ export const Home = () => {
               }}
               className="tf-sw-latest"
             >
-              {/* BLOG 1 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/due-diligence-property-checklist/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2026/01/The-Complete-Due-Diligence-Property-Checklist-for-Buyers-and-Investors-Mobile.jpg"
-                      alt="The Complete Due Diligence Property Checklist for Buyers and Investors"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>January 7, 2026</span>
+              {blogs?.data?.map((item) => (
+                <SwiperSlide id={String(item?.id)}>
+                  <Link
+                    href={`/${item?.slug}`}
+                    className="flat-blog-item hover-img"
+                  >
+                    <div className="img-style">
+                      <img src={item?.image} alt={item?.title} />
                     </div>
-                    <h5 className="title link">
-                      The Complete Due Diligence Property Checklist for Buyers and Investors
-                    </h5>
-                    <p className="description">
-                      Get Your Head Straight First – Define Your Buying Strategy &amp; Risk
-                      Profile Before you even start looking at properties...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
-
-              {/* BLOG 2 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/vacancy-rate-sydney-2026/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2026/01/Vacancy-Rate-Sydney-2026-Mobile.jpg"
-                      alt="Vacancy Rate Sydney 2026"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>January 3, 2026</span>
+                    <div className="content-box">
+                      <div className="post-author">
+                        <span>{formatDate(item?.date)}</span>
+                      </div>
+                      <h5 className="title link">{item?.title}</h5>
+                      <p
+                        className="description"
+                        dangerouslySetInnerHTML={{ __html: item?.excerpt }}
+                      />
                     </div>
-                    <h5 className="title link">
-                      Vacancy Rate Sydney 2026: Which Suburbs Have the Tightest Rental Supply
-                    </h5>
-                    <p className="description">
-                      Sydney’s Rental Market in 2026 – The Challenge Keeps Growing...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
-
-              {/* BLOG 3 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/melbourne-growth-corridors-2026/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2025/12/Melbourne-Growth-Corridors-2026-Mobile-1.jpg"
-                      alt="Melbourne Growth Corridors 2026"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>December 30, 2025</span>
-                    </div>
-                    <h5 className="title link">
-                      Melbourne Growth Corridors 2026: Best Suburbs and Emerging Areas
-                    </h5>
-                    <p className="description">
-                      The Melbourne property market in 2026 is looking pretty rosy...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
-
-              {/* BLOG 4 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/australia-property-boom-regions-2026/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2025/12/Australias-Property-Boom-Regions-2026-Mobile.jpg"
-                      alt="Australia’s Property Boom Regions 2026"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>December 27, 2025</span>
-                    </div>
-                    <h5 className="title link">
-                      Australia’s Property Boom Regions 2026
-                    </h5>
-                    <p className="description">
-                      The Australian property market is in full swing...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
-
-              {/* BLOG 5 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/townhouse-vs-house-2026/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2025/12/Townhouse-vs-house-Mobile.jpg"
-                      alt="Townhouse vs house 2026"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>December 25, 2025</span>
-                    </div>
-                    <h5 className="title link">
-                      Townhouse vs house: which is better in 2026?
-                    </h5>
-                    <p className="description">
-                      Fast Fit Decision Guide for 2026 Buyers...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
-
-              {/* BLOG 6 */}
-              <SwiperSlide>
-                <a
-                  href="https://www.landsales.com.au/new-suburbs-sydney-2026/"
-                  className="flat-blog-item hover-img"
-                >
-                  <div className="img-style">
-                    <img
-                      src="https://www.landsales.com.au/wp-content/uploads/2025/12/New-Suburbs-Sydney-A-Complete-Guide-to-Emerging-Growth-Areas-Mobile.jpg"
-                      alt="New Suburbs Sydney"
-                    />
-                  </div>
-                  <div className="content-box">
-                    <div className="post-author">
-                      <span>December 23, 2025</span>
-                    </div>
-                    <h5 className="title link">
-                      New Suburbs Sydney: A Complete Guide
-                    </h5>
-                    <p className="description">
-                      Sydney’s new suburb boom and what it means for buyers...
-                    </p>
-                  </div>
-                </a>
-              </SwiperSlide>
+                  </Link>
+                </SwiperSlide>
+              ))}
             </Swiper>
 
             {/* NAVIGATION */}
@@ -428,5 +299,5 @@ export const Home = () => {
         </div>
       </section>
     </>
- );
+  );
 };
