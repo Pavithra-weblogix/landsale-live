@@ -1,3 +1,4 @@
+// BlogList
 export interface Blog {
   id: number;
   title: string;
@@ -16,4 +17,16 @@ export interface BlogListResponse {
   count: number;
   data: Blog[];
   cached: boolean;
+}
+
+//StateCount
+export interface StateCountItem {
+  state: string;
+  slug: string;
+  count: number;
+}
+
+export interface StateCountResponse {
+  success: boolean;
+  data: StateCountItem[];
 }

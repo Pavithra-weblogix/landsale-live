@@ -3,14 +3,15 @@ import Link from "next/link";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./home.css";
-import { BlogListResponse } from "@/types/blog";
+import { BlogListResponse, StateCountResponse } from "@/types/apiTypes";
 import { formatDate } from "@/lib/utils/formatDate";
 
 type HomeProps = {
   blogs: BlogListResponse;
+  stateCount: StateCountResponse;
 };
 
-export const Home = ({ blogs }: HomeProps) => {
+export const Home = ({ blogs, stateCount }: HomeProps) => {
   return (
     <>
       {/* HERO SEARCH */}
@@ -58,20 +59,11 @@ export const Home = ({ blogs }: HomeProps) => {
           <h2 className="section-title text-center">Browse Land by State</h2>
 
           <div className="state-grid">
-            {[
-              ["VIC", "3,200+"],
-              ["NSW", "2,700+"],
-              ["QLD", "2,100+"],
-              ["WA", "1,700+"],
-              ["SA", "1,350+"],
-              ["TAS", "300+"],
-              ["ACT", "150+"],
-              ["NT", "100+"],
-            ].map(([state, count]) => (
-              <div key={state} className="state-card">
-                {state}
+            {stateCount?.data?.map((item) => (
+              <div key={item?.state} className="state-card">
+                {item?.state}
                 <br />
-                <span>{count}</span>
+                <span>{item?.count}</span>
               </div>
             ))}
           </div>

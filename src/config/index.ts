@@ -7,4 +7,5 @@ export const API_CONFIG = {
 
 export const API_ENDPOINTS = {
   BlogList: "/blog-list",
+  StateCount: "/state-count",
 };
