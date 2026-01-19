@@ -52,6 +52,29 @@ export const Home = ({
                   <button className="btn-primary">Search Land</button>
                 </div>
 
+                {false && (
+                  <div className="search-container">
+                    <div className="search-suggestions">
+                      <div className="suggestion-group">
+                        <h5 className="suggestion-title">location</h5>
+                        <ul className="suggestion-list">
+                          <li>Docklands VIC 3008</li>
+                          <li>Morayfield QLD 4506</li>
+                          <li>Bridgeman Downs QLD 4035</li>
+                        </ul>
+                      </div>
+
+                      <div className="suggestion-group">
+                        <h5 className="suggestion-title">growth-region</h5>
+                        <ul className="suggestion-list">
+                          <li>Latrobe Gippsland</li>
+                          <li>Southern Highlands</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="banner_keyword hidden-xs">
                   <ul>
                     <li>Verified Developers</li>
