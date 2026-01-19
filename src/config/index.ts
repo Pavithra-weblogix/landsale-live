@@ -8,5 +8,5 @@ export const API_CONFIG = {
 export const API_ENDPOINTS = {
   BlogList: "/blog-list",
   StateCount: "/state-count",
-  ExclusiveListing: "/new_list?exclusive=yes&limit=1",
+  NewListing: "/new_list",
 };

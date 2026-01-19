@@ -16,9 +16,15 @@ type HomeProps = {
   blogs: BlogListResponse;
   stateCount: StateCountResponse;
   exclusiveListing: LandListingResponse;
+  featuredListing: LandListingResponse;
 };
 
-export const Home = ({ blogs, stateCount, exclusiveListing }: HomeProps) => {
+export const Home = ({
+  blogs,
+  stateCount,
+  exclusiveListing,
+  featuredListing,
+}: HomeProps) => {
   const router = useRouter();
   return (
     <>
@@ -142,79 +148,22 @@ export const Home = ({ blogs, stateCount, exclusiveListing }: HomeProps) => {
               }}
               className="tf-sw-categories"
             >
-              {[
-                {
-                  title: "Lake Narracan Estate",
-                  location: "Moe, VIC",
-                  price: "$900,000",
-                  size: "512 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Evergreen Park",
-                  location: "Logan, QLD",
-                  price: "$310,000",
-                  size: "122 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Alkina",
-                  location: "Mickleham, VIC",
-                  price: "$535,000",
-                  size: "572 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Golden Grove Estate",
-                  location: "Wattle Grove, WA",
-                  price: "$705,000",
-                  size: "170 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Lake Narracan Estate",
-                  location: "Moe, VIC",
-                  price: "$900,000",
-                  size: "512 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Evergreen Park",
-                  location: "Logan, QLD",
-                  price: "$310,000",
-                  size: "122 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Alkina",
-                  location: "Mickleham, VIC",
-                  price: "$535,000",
-                  size: "572 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Golden Grove Estate",
-                  location: "Wattle Grove, WA",
-                  price: "$705,000",
-                  size: "170 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-                },
-              ].map((item, i) => (
-                <SwiperSlide key={i}>
-                  <Link href="/" className="homelengo-categories">
+              {featuredListing?.data?.data.map((item) => (
+                <SwiperSlide key={item?.id}>
+                  <Link href={`/${item?.slug}`} className="homelengo-categories">
                     <div className="listing-card">
                       <div className="image_card">
-                        <img src={item.img} alt={item.title} />
+                        <img src={item.image} alt={item.name} />
                       </div>
                       <div className="info_content">
-                        <h4>{item.title}</h4>
+                        <h4>{item.name}</h4>
                         <p className="location">
                           <i className="icon icon-mapPin"></i> {item.location}
                         </p>
                         <div className="price">
-                          <span className="price_data">{item.price}</span>
+                          <span className="price_data">Sale price</span>
                           <span className="sqft_data">
-                            <i className="icon icon-sqft"></i> {item.size}
+                            <i className="icon icon-sqft"></i> Size
                           </span>
                         </div>
                         <div className="buttons">

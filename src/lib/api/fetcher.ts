@@ -12,6 +12,16 @@ export async function apiFetch<T>(
     },
     next: { revalidate: 300 },
   });
+
+  const contentType = res.headers.get("content-type");
+
+  if (!contentType?.includes("application/json")) {
+    const text = await res.text();
+
+    console.error("Error non-JSON:", text.slice(0, 100));
+    throw new Error("API returned non-JSON response");
+  }
+
   if (!res.ok) {
     throw new Error(`API Error ${res.status}`);
   }

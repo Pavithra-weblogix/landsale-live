@@ -21,8 +21,21 @@ export async function getStateCount() {
 }
 
 // Exclusive Listing
-export async function getExclusiveListing() {
-  return apiFetch<LandListingResponse>(API_ENDPOINTS.ExclusiveListing, {
+export async function getExclusiveListing(
+  params: Record<string, string | number>,
+) {
+  const query = new URLSearchParams(
+    Object.entries(params).map(([key, value]) => [key, String(value)]),
+  ).toString();
+  return apiFetch<LandListingResponse>(`${API_ENDPOINTS.NewListing}?${query}`, {
+    method: "GET",
+  });
+}
+
+// Featured Listing
+export async function getFeaturedListing(params: Record<string, string>) {
+  const query = new URLSearchParams(params).toString();
+  return apiFetch<LandListingResponse>(`${API_ENDPOINTS.NewListing}?${query}`, {
     method: "GET",
   });
 }
