@@ -3,15 +3,23 @@ import Link from "next/link";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./home.css";
-import { BlogListResponse, StateCountResponse } from "@/types/apiTypes";
+import {
+  BlogListResponse,
+  LandListingResponse,
+  StateCountResponse,
+} from "@/types/apiTypes";
 import { formatDate } from "@/lib/utils/formatDate";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type HomeProps = {
   blogs: BlogListResponse;
   stateCount: StateCountResponse;
+  exclusiveListing: LandListingResponse;
 };
 
-export const Home = ({ blogs, stateCount }: HomeProps) => {
+export const Home = ({ blogs, stateCount, exclusiveListing }: HomeProps) => {
+  const router = useRouter();
   return (
     <>
       {/* HERO SEARCH */}
@@ -82,15 +90,31 @@ export const Home = ({ blogs, stateCount }: HomeProps) => {
       {/* FEATURED */}
       <section className="container">
         <div className="featured">
+          <Image
+            src={
+              exclusiveListing?.data?.data[0]?.image ||
+              "/images/home_new_featured.jpg"
+            }
+            fill
+            priority
+            alt="Exclusive Listing"
+            className="featured-bg"
+          />
           <div className="featured-content">
             <small>
               <span className="icon icon-star"></span> Sponsored
             </small>
-            <h3>Lake Narracan Estate</h3>
-            <p>Moe, VIC · 512 – 1,277 sqm</p>
+            <h3>{exclusiveListing?.data?.data[0]?.name}</h3>
+            <p>{exclusiveListing?.data?.data[0]?.location}</p>
             <div className="buttons">
-              <button className="btn-primary">View Estate</button>
-              <button className="btn-outline">Enquire</button>
+              <button
+                className="btn-primary"
+                onClick={() =>
+                  router.push(`/${exclusiveListing?.data?.data[0]?.slug}`)
+                }
+              >
+                View Estate
+              </button>
             </div>
           </div>
         </div>

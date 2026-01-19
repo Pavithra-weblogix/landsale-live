@@ -1,5 +1,5 @@
 // BlogList
-export interface Blog {
+interface Blog {
   id: number;
   title: string;
   slug: string;
@@ -20,7 +20,7 @@ export interface BlogListResponse {
 }
 
 //StateCount
-export interface StateCountItem {
+interface StateCountItem {
   state: string;
   slug: string;
   count: number;
@@ -29,4 +29,26 @@ export interface StateCountItem {
 export interface StateCountResponse {
   success: boolean;
   data: StateCountItem[];
+}
+
+//LandListing
+interface LandListing {
+  id: number;
+  name: string;
+  regular_price: string;
+  sale_price: string;
+  image: string;
+  slug: string;
+  link: string;
+  location: string;
+}
+interface LandListingData {
+  total: number;
+  page: number;
+  limit: number;
+  data: LandListing[];
+}
+export interface LandListingResponse {
+  success: boolean;
+  data: LandListingData;
 }

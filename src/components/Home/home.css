@@ -45,7 +45,6 @@
 
 /* FEATURED */
 .featured {
-  background: url("/images/home_new_featured.jpg") center/cover no-repeat;
   border-radius: 14px;
   padding: 40px;
   color: #fff;
@@ -68,10 +67,12 @@
     rgba(241, 234, 227, 1) 35%,
     rgba(241, 234, 227, 0) 100%
   );
+  z-index: 1;
 }
 
 .featured-content {
   position: relative;
+  z-index: 2;
 }
 
 .featured-content small {
@@ -91,6 +92,11 @@
 .featured-content p {
   color: #000;
   margin-bottom: 25px;
+}
+
+.featured-bg {
+  object-fit: cover;
+  z-index: 0;
 }
 
 /* BUTTONS */
