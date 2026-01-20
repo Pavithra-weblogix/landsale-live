@@ -1,3 +1,4 @@
+"use client";
 import "swiper/css";
 import "swiper/css/navigation";
 
@@ -8,17 +9,32 @@ import {
   getFeaturedListing,
   getStateCount,
 } from "@/lib/api/apiService";
+import { useEffect, useState } from "react";
 
-export default async function HomePage() {
-  const blogs = await getBlogs();
-  const stateCount = await getStateCount();
-  const exclusiveListing = await getExclusiveListing({
-    exclusive: "yes",
-    limit: 1,
-  });
-  const featuredListing = await getFeaturedListing({
-    featured: "yes",
-  });
+export default function HomePage() {
+  const [blogs, setBlogs] = useState<any>(null);
+  const [stateCount, setStateCount] = useState<any>(null);
+  const [exclusiveListing, setExclusive] = useState<any>(null);
+  const [featuredListing, setFeatured] = useState<any>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      setBlogs(await getBlogs());
+      setStateCount(await getStateCount());
+      setExclusive(
+        await getExclusiveListing({
+          exclusive: "yes",
+          limit: 1,
+        }),
+      );
+      setFeatured(
+        await getFeaturedListing({
+          featured: "yes",
+        }),
+      );
+    }
+    loadData();
+  }, []);
 
   return (
     <Home

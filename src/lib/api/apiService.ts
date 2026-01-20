@@ -1,23 +1,17 @@
-import {
-  BlogListResponse,
-  LandListingResponse,
-  StateCountResponse,
-} from "@/types/apiTypes";
-import { apiFetch } from "./fetcher";
-import { API_ENDPOINTS } from "@/config";
+import { SITE_URL } from "@/config";
 
 // Blog List
 export async function getBlogs() {
-  return apiFetch<BlogListResponse>(API_ENDPOINTS.BlogList, {
-    method: "GET",
-  });
+  const res = await fetch(`${SITE_URL}/api/lfs/blog-list`);
+  if (!res.ok) throw new Error("Failed to fetch blogs");
+  return res.json();
 }
 
 // State Count
 export async function getStateCount() {
-  return apiFetch<StateCountResponse>(API_ENDPOINTS.StateCount, {
-    method: "GET",
-  });
+  const res = await fetch(`${SITE_URL}/api/lfs/state-count`);
+  if (!res.ok) throw new Error("Failed to fetch state count");
+  return res.json();
 }
 
 // Exclusive Listing
@@ -27,15 +21,17 @@ export async function getExclusiveListing(
   const query = new URLSearchParams(
     Object.entries(params).map(([key, value]) => [key, String(value)]),
   ).toString();
-  return apiFetch<LandListingResponse>(`${API_ENDPOINTS.NewListing}?${query}`, {
-    method: "GET",
-  });
+
+  const res = await fetch(`${SITE_URL}/api/lfs/new-list?${query}`);
+  if (!res.ok) throw new Error("Failed to fetch exclusive listings");
+  return res.json();
 }
 
 // Featured Listing
 export async function getFeaturedListing(params: Record<string, string>) {
   const query = new URLSearchParams(params).toString();
-  return apiFetch<LandListingResponse>(`${API_ENDPOINTS.NewListing}?${query}`, {
-    method: "GET",
-  });
+
+  const res = await fetch(`${SITE_URL}/api/lfs/new-list?${query}`);
+  if (!res.ok) throw new Error("Failed to fetch featured listings");
+  return res.json();
 }

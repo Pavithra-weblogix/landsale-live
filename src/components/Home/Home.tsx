@@ -11,6 +11,16 @@ import {
 import { formatDate } from "@/lib/utils/formatDate";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { SITE_URL } from "@/config";
+
+type SuggestionGroupProps = {
+  title: string;
+  items: {
+    name: string;
+    uri: string;
+  }[];
+};
 
 type HomeProps = {
   blogs: BlogListResponse;
@@ -19,6 +29,21 @@ type HomeProps = {
   featuredListing: LandListingResponse;
 };
 
+const SuggestionGroup = ({ title, items }: SuggestionGroupProps) => (
+  <div className="suggestion-group">
+    <h5 className="suggestion-title">{title}</h5>
+    <ul className="suggestion-list">
+      {items?.map((item: any) => (
+        <li key={item?.uri}>
+          <Link href={item?.uri} className="suggestion-link">
+            {item?.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
 export const Home = ({
   blogs,
   stateCount,
@@ -26,6 +51,38 @@ export const Home = ({
   featuredListing,
 }: HomeProps) => {
   const router = useRouter();
+  const [keyword, setKeyword] = useState("");
+  const [suggestions, setSuggestions] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  };
+
+  useEffect(() => {
+    if (!keyword.trim()) {
+      setSuggestions(null);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${SITE_URL}/api/lfs/location-search?keyword=${keyword}`,
+        );
+        const data = await res.json();
+        setSuggestions(data?.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timer = setTimeout(() => fetchSuggestions(), 300);
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
   return (
     <>
       {/* HERO SEARCH */}
@@ -48,29 +105,70 @@ export const Home = ({
                   <input
                     type="text"
                     placeholder="Location: state, region / suburb"
+                    value={keyword}
+                    onChange={onSearchChange}
                   />
                   <button className="btn-primary">Search Land</button>
                 </div>
 
-                {false && (
+                {keyword.trim() && (
                   <div className="search-container">
                     <div className="search-suggestions">
-                      <div className="suggestion-group">
-                        <h5 className="suggestion-title">location</h5>
-                        <ul className="suggestion-list">
-                          <li>Docklands VIC 3008</li>
-                          <li>Morayfield QLD 4506</li>
-                          <li>Bridgeman Downs QLD 4035</li>
-                        </ul>
-                      </div>
+                      {loading ? (
+                        <p>Loading...</p>
+                      ) : (
+                        <>
+                          {Object.values(suggestions || {}).some(
+                            (arr) => Array.isArray(arr) && arr.length > 0,
+                          ) ? (
+                            <>
+                              {suggestions.location?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"Location"}
+                                  items={suggestions?.location}
+                                />
+                              )}
 
-                      <div className="suggestion-group">
-                        <h5 className="suggestion-title">growth-region</h5>
-                        <ul className="suggestion-list">
-                          <li>Latrobe Gippsland</li>
-                          <li>Southern Highlands</li>
-                        </ul>
-                      </div>
+                              {suggestions?.["growth-region"]?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"Growth Region"}
+                                  items={suggestions?.["growth-region"]}
+                                />
+                              )}
+
+                              {suggestions.estate?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"Estate"}
+                                  items={suggestions?.estate}
+                                />
+                              )}
+
+                              {suggestions.developer?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"Developer"}
+                                  items={suggestions?.developer}
+                                />
+                              )}
+
+                              {suggestions?.["city-council"]?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"City Council"}
+                                  items={suggestions?.["city-council"]}
+                                />
+                              )}
+
+                              {suggestions.builders?.length > 0 && (
+                                <SuggestionGroup
+                                  title={"Builders"}
+                                  items={suggestions?.builders}
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <p>No results found for '{keyword}'</p>
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
@@ -173,7 +271,10 @@ export const Home = ({
             >
               {featuredListing?.data?.data.map((item) => (
                 <SwiperSlide key={item?.id}>
-                  <Link href={`/${item?.slug}`} className="homelengo-categories">
+                  <Link
+                    href={`/${item?.slug}`}
+                    className="homelengo-categories"
+                  >
                     <div className="listing-card">
                       <div className="image_card">
                         <img src={item.image} alt={item.name} />
