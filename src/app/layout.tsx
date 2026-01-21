@@ -3,6 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/styles/icomoon.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 

@@ -6,9 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
 import "./estatelistings.css";
 
 const EstateListings = () => {
