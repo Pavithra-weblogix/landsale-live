@@ -3,8 +3,7 @@
 import { Home } from "@/components/Home/Home";
 import {
   getBlogs,
-  getExclusiveListing,
-  getFeaturedListing,
+  getListing,
   getStateCount,
 } from "@/lib/api/apiService";
 import { useEffect, useState } from "react";
@@ -20,13 +19,13 @@ export default function HomePage() {
       setBlogs(await getBlogs());
       setStateCount(await getStateCount());
       setExclusive(
-        await getExclusiveListing({
+        await getListing({
           exclusive: "yes",
           limit: 1,
         }),
       );
       setFeatured(
-        await getFeaturedListing({
+        await getListing({
           featured: "yes",
         }),
       );

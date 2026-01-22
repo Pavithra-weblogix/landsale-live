@@ -14,8 +14,8 @@ export async function getStateCount() {
   return res.json();
 }
 
-// Exclusive Listing
-export async function getExclusiveListing(
+// Listing
+export async function getListing(
   params: Record<string, string | number>,
 ) {
   const query = new URLSearchParams(
@@ -23,15 +23,6 @@ export async function getExclusiveListing(
   ).toString();
 
   const res = await fetch(`${SITE_URL}/api/lfs/new-list?${query}`);
-  if (!res.ok) throw new Error("Failed to fetch exclusive listings");
-  return res.json();
-}
-
-// Featured Listing
-export async function getFeaturedListing(params: Record<string, string>) {
-  const query = new URLSearchParams(params).toString();
-
-  const res = await fetch(`${SITE_URL}/api/lfs/new-list?${query}`);
-  if (!res.ok) throw new Error("Failed to fetch featured listings");
+  if (!res.ok) throw new Error("Failed to fetch listings");
   return res.json();
 }
