@@ -1,37 +1,18 @@
-"use client";
-
 import { Home } from "@/components/Home/Home";
-import {
-  getBlogs,
-  getListing,
-  getStateCount,
-} from "@/lib/api/apiService";
-import { useEffect, useState } from "react";
+import { getBlogs, getListing, getStateCount } from "@/lib/api/apiService";
 
-export default function HomePage() {
-  const [blogs, setBlogs] = useState<any>(null);
-  const [stateCount, setStateCount] = useState<any>(null);
-  const [exclusiveListing, setExclusive] = useState<any>(null);
-  const [featuredListing, setFeatured] = useState<any>(null);
+export const dynamic = "force-dynamic";
 
-  useEffect(() => {
-    async function loadData() {
-      setBlogs(await getBlogs());
-      setStateCount(await getStateCount());
-      setExclusive(
-        await getListing({
-          exclusive: "yes",
-          limit: 1,
-        }),
-      );
-      setFeatured(
-        await getListing({
-          featured: "yes",
-        }),
-      );
-    }
-    loadData();
-  }, []);
+export default async function HomePage() {
+  const blogs = await getBlogs();
+  const stateCount = await getStateCount();
+  const exclusiveListing = await getListing({
+    exclusive: "yes",
+    limit: 1,
+  });
+  const featuredListing = await getListing({
+    featured: "yes",
+  });
 
   return (
     <Home

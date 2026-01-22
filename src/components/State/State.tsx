@@ -4,14 +4,21 @@ import { useEffect, useRef } from "react";
 import Map, { Marker } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Link from "next/link";
-import { Navigation } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "./state.css";
 import { MAPBOX_TOKEN } from "@/config";
+import { LandListingResponse } from "@/types/apiTypes";
+import ListingSlider from "@/components/Sections/ListingSlider";
+import Image from "next/image";
 
-const State = () => {
+type StateProps = {
+  exclusiveListing: LandListingResponse;
+  featuredListing: LandListingResponse;
+};
+
+const State = ({ exclusiveListing, featuredListing }: StateProps) => {
   const [expanded, setExpanded] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -25,7 +32,6 @@ const State = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -352,144 +358,55 @@ const State = () => {
           </div>
         </div>
       </section>
-      <section className="flat-section slider_new flat-categories arrow_shadow pt-0">
-        <div className="container">
-          <div className="box-title style-1">
-            <h3 className="title mt-4">All Land for Sale in New South Wales</h3>
-          </div>
-          <div className="wrap-categories-sw">
-            <Swiper
-              modules={[Navigation]}
-              navigation={{
-                nextEl: ".nav-prev-category",
-                prevEl: ".nav-next-category",
-              }}
-              spaceBetween={10}
-              slidesPerView={4}
-              breakpoints={{
-                0: { slidesPerView: 2 },
-                576: { slidesPerView: 3 },
-                992: { slidesPerView: 4 },
-              }}
-              className="tf-sw-categories"
-            >
-              {[
-                {
-                  title: "Lake Narracan Estate",
-                  location: "Moe, VIC",
-                  price: "$900,000",
-                  size: "512 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Evergreen Park",
-                  location: "Logan, QLD",
-                  price: "$310,000",
-                  size: "122 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Alkina",
-                  location: "Mickleham, VIC",
-                  price: "$535,000",
-                  size: "572 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Golden Grove Estate",
-                  location: "Wattle Grove, WA",
-                  price: "$705,000",
-                  size: "170 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Lake Narracan Estate",
-                  location: "Moe, VIC",
-                  price: "$900,000",
-                  size: "512 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2530-huntley-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Evergreen Park",
-                  location: "Logan, QLD",
-                  price: "$310,000",
-                  size: "122 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/03/2525-figtree-illawarra-new-south-wales.jpg",
-                },
-                {
-                  title: "Alkina",
-                  location: "Mickleham, VIC",
-                  price: "$535,000",
-                  size: "572 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-sutton-capital-new-south-wales.jpg",
-                },
-                {
-                  title: "Golden Grove Estate",
-                  location: "Wattle Grove, WA",
-                  price: "$705,000",
-                  size: "170 sqm",
-                  img: "https://www.landsales.com.au/wp-content/uploads/2025/09/2620-tralee-capital-new-south-wales.jpg",
-                },
-              ].map((item, i) => (
-                <SwiperSlide key={i}>
-                  <Link href="/" className="homelengo-categories">
-                    <div className="listing-card">
-                      <div className="image_card">
-                        <img src={item.img} alt={item.title} />
-                      </div>
-                      <div className="info_content">
-                        <h4>{item.title}</h4>
-                        <p className="location">
-                          <i className="icon icon-mapPin"></i> {item.location}
-                        </p>
-                        <div className="price">
-                          <span className="price_data">{item.price}</span>
-                          <span className="sqft_data">
-                            <i className="icon icon-sqft"></i> {item.size}
-                          </span>
-                        </div>
-                        <div className="buttons">
-                          <button className="btn-primary">View Estate</button>
-                          <button className="btn-outline">Enquire</button>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+      <ListingSlider
+        title={"All Land for Sale in New South Wales"}
+        items={featuredListing?.data?.data || []}
+      />
 
-            <div className="nav-prev-category swiper-button-next round-toggle"></div>
-            <div className="nav-next-category swiper-button-prev round-toggle"></div>
-          </div>
-        </div>
-      </section>
-      <section className="section">
-        <div className="container">
-          <div className="sponsored-project">
-            <span className="tag">Sponsored Project</span>
+      {exclusiveListing?.data?.data?.length ? (
+        <section className="section">
+          <div className="container">
+            <div className="sponsored-project">
+              <Image
+                src={
+                  exclusiveListing?.data?.data[0]?.image ||
+                  "/images/lake_bg_sponserd.jpg"
+                }
+                fill
+                priority
+                alt="Exclusive Listing"
+                className="featured-bg"
+              />
+              <span className="tag">Sponsored Project</span>
 
-            <div className="overlay">
-              <h2>Lake Narracan Resort</h2>
-              <p>Moe, VIC · Waterfront Land</p>
+              <div className="overlay">
+                <h2>{exclusiveListing?.data?.data[0]?.name}</h2>
+                <p>{exclusiveListing?.data?.data[0]?.location}</p>
 
-              <div className="project-footer">
-                <span>From $245,000 · Multiple lots available</span>
+                <div className="project-footer">
+                  <span>From $245,000 · Multiple lots available</span>
 
-                <div className="actions">
-                  <Link href="#" className="btn outline">
-                    View Project
-                  </Link>
+                  <div className="actions">
+                    <Link
+                      href={`/${exclusiveListing?.data?.data[0]?.slug}`}
+                      className="btn outline"
+                    >
+                      View Project
+                    </Link>
 
-                  <Link href="#" className="btn primary">
-                    Enquire <i className="icon icon-arr-r"></i>
-                  </Link>
+                    <Link
+                      href={`/${exclusiveListing?.data?.data[0]?.slug}`}
+                      className="btn primary"
+                    >
+                      Enquire <i className="icon icon-arr-r"></i>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
       <section className="land_list section">
         <div className="container">
           <div className="card-grid">

@@ -32,7 +32,7 @@ export interface StateCountResponse {
 }
 
 //LandListing
-interface LandListing {
+export interface LandListing {
   id: number;
   name: string;
   regular_price: string;
@@ -41,6 +41,7 @@ interface LandListing {
   slug: string;
   link: string;
   location: string;
+  area_size: string;
 }
 interface LandListingData {
   total: number;

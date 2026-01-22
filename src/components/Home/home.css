@@ -94,11 +94,6 @@
   margin-bottom: 25px;
 }
 
-.featured-bg {
-  object-fit: cover;
-  z-index: 0;
-}
-
 /* BUTTONS */
 .buttons {
   display: flex;

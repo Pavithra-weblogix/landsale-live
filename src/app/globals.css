@@ -1047,3 +1047,8 @@ label {
         display: none !important
     }
 }
+
+.featured-bg {
+  object-fit: cover;
+  z-index: 0;
+}

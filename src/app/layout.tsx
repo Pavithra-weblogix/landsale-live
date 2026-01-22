@@ -6,8 +6,8 @@ import "./globals.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
+import Header from "@/components/Header/Header";
+import Footer from "@/components/Footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased body`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased body`}
+      >
         <div id="wrapper">
           <div id="pagee" className="clearfix">
             <Header />
