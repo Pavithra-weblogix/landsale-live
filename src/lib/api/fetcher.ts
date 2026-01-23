@@ -18,7 +18,7 @@ export async function apiFetch<T>(
   if (!contentType?.includes("application/json")) {
     const text = await res.text();
 
-    console.error("Error non-JSON:", text.slice(0, 100));
+    console.error("Error non-JSON:", text.slice(0, 300));
     throw new Error("API returned non-JSON response");
   }
 

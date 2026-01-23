@@ -26,3 +26,16 @@ export async function getListing(
   if (!res.ok) throw new Error("Failed to fetch listings");
   return res.json();
 }
+
+// Filter Listing
+export async function getListingsWithFilters(
+  params: Record<string, string | number>,
+) {
+  const query = new URLSearchParams(
+    Object.entries(params).map(([key, value]) => [key, String(value)]),
+  ).toString();
+
+  const res = await fetch(`${SITE_URL}/api/lfs/filter-api?${query}`);
+  if (!res.ok) throw new Error("Failed to fetch filter listings");
+  return res.json();
+}

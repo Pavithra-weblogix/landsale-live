@@ -12,4 +12,5 @@ export const API_ENDPOINTS = {
   StateCount: "/state-count",
   NewListing: "/new_list",
   LocationSearch: "/location-search",
+  FilterApi: "/filter-api",
 };

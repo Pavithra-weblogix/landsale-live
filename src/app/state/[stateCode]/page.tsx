@@ -1,5 +1,5 @@
 import State from "@/components/State/State";
-import { getListing } from "@/lib/api/apiService";
+import { getListing, getListingsWithFilters } from "@/lib/api/apiService";
 
 export default async function StatePage({
   params,
@@ -16,11 +16,17 @@ export default async function StatePage({
     featured: "yes",
     state: stateCode,
   });
+  const mainFilterListing = await getListingsWithFilters({
+    state: stateCode,
+    // page: 1,
+    limit: 50,
+  });
 
   return (
     <State
       exclusiveListing={exclusiveListing}
       featuredListing={featuredListing}
+      mainFilterListing={mainFilterListing?.data}
     />
   );
 }

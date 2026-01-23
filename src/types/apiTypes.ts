@@ -53,3 +53,20 @@ export interface LandListingResponse {
   success: boolean;
   data: LandListingData;
 }
+
+//FilterApi
+export interface FilterListing {
+  id: string;
+  name: string;
+  slug: string;
+  price: string;
+  image: string | false;
+  area_size: string;
+  location: string;
+}
+
+export interface FilterListingResponse {
+  page: number;
+  count: number;
+  data: FilterListing[];
+}

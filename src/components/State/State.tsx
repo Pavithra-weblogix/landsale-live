@@ -6,16 +6,22 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import Link from "next/link";
 import "./state.css";
 import { MAPBOX_TOKEN } from "@/config";
-import { LandListingResponse } from "@/types/apiTypes";
 import ListingSlider from "@/components/Sections/ListingSlider";
 import Image from "next/image";
+import { FilterListing, LandListingResponse } from "@/types/apiTypes";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
   featuredListing: LandListingResponse;
+  mainFilterListing: FilterListing[];
 };
 
-const State = ({ exclusiveListing, featuredListing }: StateProps) => {
+const State = ({
+  exclusiveListing,
+  featuredListing,
+  mainFilterListing,
+}: StateProps) => {
   const [expanded, setExpanded] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -410,26 +416,32 @@ const State = ({ exclusiveListing, featuredListing }: StateProps) => {
       <section className="land_list section">
         <div className="container">
           <div className="card-grid">
-            {landData.map((item, index) => (
-              <article className="land-card" key={index}>
-                <div className="image_card">
-                  <span className="badge">{item.badge}</span>
-                  <img src={item.image} alt={item.title} />
-                </div>
-
-                <div className="info_content">
-                  <h3>{item.title}</h3>
-
-                  <p className="location">
-                    <i className="icon icon-mapPin"></i> {item.location}
-                  </p>
-
-                  <div className="footer_data">
-                    <p className="price">{item.price}</p>
-                    <i className="icon icon-arr-r"></i>
+            {mainFilterListing.map((item) => (
+              <Link href={`/${item.slug}`} key={item?.id}>
+                <article className="land-card">
+                  <div className="image_card">
+                    <span className="badge">PrivateEstate</span>
+                    {item.image && <img src={item.image} alt={item.name} />}
                   </div>
-                </div>
-              </article>
+
+                  <div className="info_content">
+                    <h3>{item.name}</h3>
+
+                    <p className="location">
+                      <i className="icon icon-mapPin"></i> {item.location}
+                    </p>
+
+                    <div className="footer_data">
+                      <p className="price">
+                        {item.price
+                          ? formatPrice(item.price)
+                          : "Price on application"}
+                      </p>
+                      <i className="icon icon-arr-r"></i>
+                    </div>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
         </div>
@@ -489,33 +501,6 @@ const State = ({ exclusiveListing, featuredListing }: StateProps) => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-      <section className="land_list section">
-        <div className="container">
-          <div className="card-grid">
-            {landData.map((item, index) => (
-              <article className="land-card" key={index}>
-                <div className="image_card">
-                  <span className="badge">{item.badge}</span>
-                  <img src={item.image} alt={item.title} />
-                </div>
-
-                <div className="info_content">
-                  <h3>{item.title}</h3>
-
-                  <p className="location">
-                    <i className="icon icon-mapPin"></i> {item.location}
-                  </p>
-
-                  <div className="footer_data">
-                    <p className="price">{item.price}</p>
-                    <i className="icon icon-arr-r"></i>
-                  </div>
-                </div>
-              </article>
-            ))}
           </div>
         </div>
       </section>
