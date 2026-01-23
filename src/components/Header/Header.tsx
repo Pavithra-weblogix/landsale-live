@@ -71,14 +71,32 @@ const Header = () => {
                           <li className="dropdown2">
                             <Link href="#">Land for sale</Link>
                             <ul>
-                              <li><Link href="#">New South Wales</Link></li>
-                              <li><Link href="#">Queensland</Link></li>
-                              <li><Link href="#">Western Australia</Link></li>
-                              <li><Link href="#">Victoria</Link></li>
-                              <li><Link href="#">South Australia</Link></li>
-                              <li><Link href="#">Australian Capital Territory</Link></li>
-                              <li><Link href="#">Tasmania</Link></li>
-                              <li><Link href="#">Northern Territory</Link></li>
+                              <li>
+                                <Link href="/state/nsw">New South Wales</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/qld">Queensland</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/wa">Western Australia</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/vic">Victoria</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/sa">South Australia</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/act">
+                                  Australian Capital Territory
+                                </Link>
+                              </li>
+                              <li>
+                                <Link href="/state/tas">Tasmania</Link>
+                              </li>
+                              <li>
+                                <Link href="/state/nt">Northern Territory</Link>
+                              </li>
                             </ul>
                           </li>
 
@@ -129,18 +147,38 @@ const Header = () => {
               {/* Clone desktop menu via CSS/JS if needed */}
               <div className="menu-outer">
                 <ul className="navigation clearfix">
-                  <li><Link href="/">Home</Link></li>
+                  <li>
+                    <Link href="/">Home</Link>
+                  </li>
                   <li className="dropdown2">
                     <Link href="#">Land for sale</Link>
                     <ul>
-                      <li><Link href="#">New South Wales</Link></li>
-                      <li><Link href="#">Queensland</Link></li>
-                      <li><Link href="#">Western Australia</Link></li>
-                      <li><Link href="#">Victoria</Link></li>
-                      <li><Link href="#">South Australia</Link></li>
-                      <li><Link href="#">Australian Capital Territory</Link></li>
-                      <li><Link href="#">Tasmania</Link></li>
-                      <li><Link href="#">Northern Territory</Link></li>
+                      <li>
+                        <Link href="/state/nsw">New South Wales</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/qld">Queensland</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/wa">Western Australia</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/vic">Victoria</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/sa">South Australia</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/act">
+                          Australian Capital Territory
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/state/tas">Tasmania</Link>
+                      </li>
+                      <li>
+                        <Link href="/state/nt">Northern Territory</Link>
+                      </li>
                     </ul>
                   </li>
                   <li><Link href="/blog">Blog</Link></li>

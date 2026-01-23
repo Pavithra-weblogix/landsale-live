@@ -19,17 +19,23 @@ const Footer = () => {
                 <div className="tf-collapse-content">
                   <ul className="mt-10 navigation-menu-footer">
                     {[
-                      "New South Wales",
-                      "Queensland",
-                      "Western Australia",
-                      "Victoria",
-                      "South Australia",
-                      "Australian Capital Territory",
-                      "Tasmania",
-                    ].map((item, i) => (
-                      <li key={i}>
-                        <Link href="#" className="caption-1 text-variant-2">
-                          {item}
+                      { name: "New South Wales", slug: "/state/nsw" },
+                      { name: "Queensland", slug: "/state/qld" },
+                      { name: "Western Australia", slug: "/state/wa" },
+                      { name: "Victoria", slug: "/state/vic" },
+                      { name: "South Australia", slug: "/state/sa" },
+                      {
+                        name: "Australian Capital Territory",
+                        slug: "/state/act",
+                      },
+                      { name: "Tasmania", slug: "/state/tas" },
+                    ].map((item) => (
+                      <li key={item.slug}>
+                        <Link
+                          href={item.slug}
+                          className="caption-1 text-variant-2"
+                        >
+                          {item.name}
                         </Link>
                       </li>
                     ))}
