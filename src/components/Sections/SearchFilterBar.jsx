@@ -1,32 +1,9 @@
 "use client";
 
+import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
+import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
-const PRICE_OPTIONS = [
-  "Any",
-  "100000",
-  "200000",
-  "300000",
-  "400000",
-  "500000",
-  "750000",
-  "1000000",
-  "1500000",
-  "2000000",
-];
-
-const LAND_OPTIONS = [
-  "Any",
-  "100",
-  "200",
-  "300",
-  "400",
-  "500",
-  "750",
-  "1000",
-  "2000",
-  "5000",
-];
 
 export default function SearchFilterBar() {
   const [openFilters, setOpenFilters] = useState(false);
@@ -38,6 +15,9 @@ export default function SearchFilterBar() {
   const [landMax, setLandMax] = useState("");
 
   const modalRef = useRef(null);
+
+  const router = useRouter();
+  const params = useParams();
 
   // Close on outside click
   useEffect(() => {
@@ -71,6 +51,15 @@ export default function SearchFilterBar() {
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, []);
+
+  useEffect(() => {
+    if (!params?.slug) return;
+
+    const filters = parseFiltersFromUrl(params.slug);
+
+    setPriceMin(filters.min_price?.toString() || "");
+    setPriceMax(filters.max_price?.toString() || "");
+  }, [params]);
 
   const clearFilters = () => {
     setPriceMin("");

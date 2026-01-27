@@ -15,3 +15,28 @@ export const API_ENDPOINTS = {
   FilterApi: "/filter-api",
   LocSearch: "/loc-search",
 };
+
+export const PRICE_OPTIONS = [
+  "Any",
+  "100000",
+  "200000",
+  "300000",
+  "400000",
+  "500000",
+  "750000",
+  "1000000",
+  "1500000",
+  "2000000",
+];
+export const LAND_OPTIONS = [
+  "Any",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "750",
+  "1000",
+  "2000",
+  "5000",
+];
