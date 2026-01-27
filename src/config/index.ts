@@ -13,4 +13,5 @@ export const API_ENDPOINTS = {
   NewListing: "/new_list",
   LocationSearch: "/location-search",
   FilterApi: "/filter-api",
+  LocSearch: "/loc-search",
 };
