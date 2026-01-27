@@ -270,15 +270,28 @@ const State = ({
           <SearchFilterBar />
         </div>
       </section>
-      <ListingSlider
-        //title={"All Land for Sale in New South Wales"}
-        items={featuredListing?.data?.data || []}
-      />
+      <div className="container">
+        <div className="short_by">
+          <div className="short_by_count">
+            <p>Showing 1 - 25 of 40788 properties</p>
+          </div>
+          <div className="short_by_inner ">
+            <label>Sort by:</label>
+            <select name="orderby" className="form-select">
+              <option value="featured">Featured</option>
+              <option value="priceasc">Price (Low to High)</option>
+              <option value="price-desc">Price (High to Low)</option>
+              <option value="year-desc">Year Made (High to Low)</option>
+              <option value="year-asc">Year Made (Low to High)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <ListingSlider items={featuredListing?.data?.data || []} />
 
       {exclusiveListing?.data?.data?.length ? (
         <section className="section">
           <div className="container">
-            
             <div className="sponsored-project">
               <Image
                 src={

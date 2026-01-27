@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 type ListingSliderProps = {
-  title: string;
+  title?: string;
   items: LandListing[];
 };
 
@@ -14,24 +14,11 @@ export default function ListingSlider({ title, items }: ListingSliderProps) {
   return (
     <section className="flat-section slider_new flat-categories arrow_shadow pt-0">
       <div className="container">
-        <div className="short_by">
-          <div className="short_by_count">
-            <p>Showing 1 - 25 of 40788 properties</p>
+        {title && (
+          <div className="box-title style-1">
+            <h3 className="title mt-4">{title}</h3>
           </div>
-          <div className="short_by_inner ">
-            <label>Sort by:</label>
-            <select name="orderby" className="form-select">
-              <option value="featured" >Featured</option>
-              <option value="priceasc" >Price (Low to High)</option>
-              <option value="price-desc" >Price (High to Low)</option>
-              <option value="year-desc" >Year Made (High to Low)</option>
-              <option value="year-asc" >Year Made (Low to High)</option>
-            </select>
-          </div>
-        </div>
-        <div className="box-title style-1">
-          <h3 className="title mt-4">{title}</h3>
-        </div>
+        )}
         <div className="wrap-categories-sw">
           <Swiper
             modules={[Navigation]}
