@@ -1,0 +1,254 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+const PRICE_OPTIONS = [
+  "Any",
+  "100000",
+  "200000",
+  "300000",
+  "400000",
+  "500000",
+  "750000",
+  "1000000",
+  "1500000",
+  "2000000",
+];
+
+const LAND_OPTIONS = [
+  "Any",
+  "100",
+  "200",
+  "300",
+  "400",
+  "500",
+  "750",
+  "1000",
+  "2000",
+  "5000",
+];
+
+export default function SearchFilterBar() {
+  const [openFilters, setOpenFilters] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const [priceMin, setPriceMin] = useState("");
+  const [priceMax, setPriceMax] = useState("");
+  const [landMin, setLandMin] = useState("");
+  const [landMax, setLandMax] = useState("");
+
+  const modalRef = useRef(null);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        setOpenFilters(false);
+      }
+    };
+    if (openFilters) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [openFilters]);
+
+  useEffect(() => {
+    if (openFilters) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    // Cleanup (important for route change / unmount)
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, [openFilters]);
+
+  // Close on ESC
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") setOpenFilters(false);
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  const clearFilters = () => {
+    setPriceMin("");
+    setPriceMax("");
+    setLandMin("");
+    setLandMax("");
+  };
+
+  const applyFilters = () => {
+    console.log({
+      search,
+      priceMin,
+      priceMax,
+      landMin,
+      landMax,
+    });
+    setOpenFilters(false);
+  };
+
+  return (
+    <>
+      <div className="srpBar">
+        {/* Search input */}
+        <div className="srpSearchWrap">
+          <span className="icon">
+            <i className="icon icon-search search-icon"></i>
+          </span>
+          <input
+            className="srpSearchInput"
+            placeholder="Search region, suburb or postcode"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* Pills */}
+        <div className="actions">
+        <button
+          className="pillBtn pillPrimary"
+          onClick={() => setOpenFilters(true)}
+        >
+          {/* <span className="pillCount">1</span> */}
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.5 12.375V3.4375M5.5 12.375C5.86467 12.375 6.21441 12.5199 6.47227 12.7777C6.73013 13.0356 6.875 13.3853 6.875 13.75C6.875 14.1147 6.73013 14.4644 6.47227 14.7223C6.21441 14.9801 5.86467 15.125 5.5 15.125M5.5 12.375C5.13533 12.375 4.78559 12.5199 4.52773 12.7777C4.26987 13.0356 4.125 13.3853 4.125 13.75C4.125 14.1147 4.26987 14.4644 4.52773 14.7223C4.78559 14.9801 5.13533 15.125 5.5 15.125M5.5 15.125V18.5625M16.5 12.375V3.4375M16.5 12.375C16.8647 12.375 17.2144 12.5199 17.4723 12.7777C17.7301 13.0356 17.875 13.3853 17.875 13.75C17.875 14.1147 17.7301 14.4644 17.4723 14.7223C17.2144 14.9801 16.8647 15.125 16.5 15.125M16.5 12.375C16.1353 12.375 15.7856 12.5199 15.5277 12.7777C15.2699 13.0356 15.125 13.3853 15.125 13.75C15.125 14.1147 15.2699 14.4644 15.5277 14.7223C15.7856 14.9801 16.1353 15.125 16.5 15.125M16.5 15.125V18.5625M11 6.875V3.4375M11 6.875C11.3647 6.875 11.7144 7.01987 11.9723 7.27773C12.2301 7.53559 12.375 7.88533 12.375 8.25C12.375 8.61467 12.2301 8.96441 11.9723 9.22227C11.7144 9.48013 11.3647 9.625 11 9.625M11 6.875C10.6353 6.875 10.2856 7.01987 10.0277 7.27773C9.76987 7.53559 9.625 7.88533 9.625 8.25C9.625 8.61467 9.76987 8.96441 10.0277 9.22227C10.2856 9.48013 10.6353 9.625 11 9.625M11 9.625V18.5625"
+              stroke="#161E2D"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          Filters
+        </button>
+
+        {/* Search CTA */}
+        <button className="searchBtn">Search</button>
+        <button className="pillBtn mapBtn">
+          <i className="icon icon-map-trifold"></i> Map
+        </button>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      {openFilters && <div className="overlay" />}
+
+      {/* Filters Modal */}
+      {openFilters && (
+        <div className="filterModal" ref={modalRef}>
+          <div className="modalHeader">
+            <h3>Filters</h3>
+            <button className="closeBtn" onClick={() => setOpenFilters(false)}>
+              ✕
+            </button>
+          </div>
+
+          <div className="modalBody">
+            {/* Price */}
+            <div className="filterGroup">
+              <div className="filterTitle">Price</div>
+              <div className="filterGrid">
+                <div>
+                  <label>Min</label>
+                  <select className="form-select"
+                    value={priceMin}
+                    onChange={(e) => setPriceMin(e.target.value)}
+                  >
+                    {PRICE_OPTIONS.map((v) => (
+                      <option key={v} value={v === "Any" ? "" : v}>
+                        {v === "Any" ? "Any" : `$${Number(v).toLocaleString()}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label>Max</label>
+                  <select className="form-select"
+                    value={priceMax}
+                    onChange={(e) => setPriceMax(e.target.value)}
+                  >
+                    {PRICE_OPTIONS.map((v) => (
+                      <option key={v} value={v === "Any" ? "" : v}>
+                        {v === "Any" ? "Any" : `$${Number(v).toLocaleString()}`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <hr></hr>
+
+            {/* Land size */}
+            <div className="filterGroup">
+              <div className="filterTitle">Land size (m²)</div>
+              <div className="filterGrid">
+                <div>
+                  <label>Min</label>
+                  <select className="form-select"
+                    value={landMin}
+                    onChange={(e) => setLandMin(e.target.value)}
+                  >
+                    {LAND_OPTIONS.map((v) => (
+                      <option key={v} value={v === "Any" ? "" : v}>
+                        {v === "Any" ? "Any" : `${v} m²`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label>Max</label>
+                  <select className="form-select"
+                    value={landMax}
+                    onChange={(e) => setLandMax(e.target.value)}
+                  >
+                    {LAND_OPTIONS.map((v) => (
+                      <option key={v} value={v === "Any" ? "" : v}>
+                        {v === "Any" ? "Any" : `${v} m²`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr></hr>
+
+            {/* Land size */}
+            <div className="filterGroup">
+              <div className="filterTitle">Listing Type</div>
+              <div className="filterGrid">
+                <div>
+                  <select className="form-select">
+                    <option>Any</option>
+                    <option>Estate</option>
+                    <option>Private Seller</option>
+                    <option>Agent</option>
+                  </select>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+          <div className="modalFooter">
+            <button className="clearBtn" onClick={clearFilters}>
+              Clear
+            </button>
+            <button className="applyBtn" onClick={applyFilters}>
+              Apply
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

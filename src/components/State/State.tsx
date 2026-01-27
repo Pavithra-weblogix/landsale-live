@@ -7,6 +7,7 @@ import Link from "next/link";
 import "./state.css";
 import { MAPBOX_TOKEN } from "@/config";
 import ListingSlider from "@/components/Sections/ListingSlider";
+import SearchFilterBar from "@/components/Sections/SearchFilterBar";
 import Image from "next/image";
 import { FilterListing, LandListingResponse } from "@/types/apiTypes";
 import { formatPrice } from "@/lib/utils/formatPrice";
@@ -151,7 +152,7 @@ const State = ({
   ];
   return (
     <>
-      <section className="section-top-map find_map_location">
+      {/* <section className="section-top-map find_map_location">
         <div className="wrap-map">
           <div id="map" className="row-height">
             <Map
@@ -175,7 +176,7 @@ const State = ({
           <div className="topinfo_land_one">
             <div className="content-wrapper">
               <div className={`content ${expanded ? "expanded" : "collapsed"}`}>
-                {/* Dynamic Title */}
+                
                 <h1 className="dynamic-title">
                   104 Estates with Land for Sale in New South Wales, Australia
                 </h1>
@@ -247,131 +248,37 @@ const State = ({
                   </span>
                 </p>
               </div>
-              {/* VIEW MORE / LESS BUTTON */}
+              
               <div className="view-more-wrap">
                 <button
                   className="view-more-btn"
                   onClick={() => setExpanded(!expanded)}
                 >
                   {expanded ? "View Less" : "View More"}
-                  {/* <span className="arrow">{expanded ? "▲" : "▼"}</span> */}
+                  
                 </button>
               </div>
             </div>
 
-            {/* Empty button preserved as in original HTML */}
+           
           </div>
         </div>
-      </section>
+      </section> */}
       <section className="top-search">
         <div className="container">
-          <div className="search-wrap" ref={wrapperRef}>
-            <div className="search-filters">
-              {/* LOCATION */}
-              <div className="filter">
-                <button
-                  className="filter-btn"
-                  onClick={() => toggleDropdown("location")}
-                >
-                  <i className="icon icon-mapPin"></i> Location
-                </button>
-
-                <div
-                  className={`dropdown ${openDropdown === "location" ? "active" : ""}`}
-                >
-                  <input type="text" placeholder="Search suburb or region" />
-                  <ul>
-                    <li>Sydney Metro</li>
-                    <li>Hunter Valley</li>
-                    <li>Central Coast</li>
-                    <li>Illawarra</li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* PRICE */}
-              <div className="filter">
-                <button
-                  className="filter-btn"
-                  onClick={() => toggleDropdown("price")}
-                >
-                  $ Price
-                </button>
-
-                <div
-                  className={`dropdown ${openDropdown === "price" ? "active" : ""}`}
-                >
-                  <label>Min Price</label>
-                  <input type="number" placeholder="$100,000" />
-
-                  <label>Max Price</label>
-                  <input type="number" placeholder="$1,500,000" />
-
-                  <button className="apply-btn">Apply</button>
-                </div>
-              </div>
-
-              {/* LISTING */}
-              <div className="filter">
-                <button
-                  className="filter-btn"
-                  onClick={() => toggleDropdown("listing")}
-                >
-                  Listing Type
-                </button>
-
-                <div
-                  className={`dropdown checkbox_friendly ${
-                    openDropdown === "listing" ? "active" : ""
-                  }`}
-                >
-                  <label>
-                    <input type="checkbox" /> Estate
-                  </label>
-                  <label>
-                    <input type="checkbox" /> Private Seller
-                  </label>
-                  <label>
-                    <input type="checkbox" /> Prestige
-                  </label>
-                </div>
-              </div>
-
-              {/* SORT */}
-              <div className="filter">
-                <button
-                  className="filter-btn"
-                  onClick={() => toggleDropdown("sort")}
-                >
-                  Sort
-                </button>
-
-                <div
-                  className={`dropdown ${openDropdown === "sort" ? "active" : ""}`}
-                >
-                  <ul>
-                    <li>Newest</li>
-                    <li>Price (Low → High)</li>
-                    <li>Price (High → Low)</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <button className="reset-btn" onClick={() => setOpenDropdown(null)}>
-              Reset
-            </button>
-          </div>
+          <h1 className="dynamic-title">Land for sale in New South Wales</h1>
+          <SearchFilterBar />
         </div>
       </section>
       <ListingSlider
-        title={"All Land for Sale in New South Wales"}
+        //title={"All Land for Sale in New South Wales"}
         items={featuredListing?.data?.data || []}
       />
 
       {exclusiveListing?.data?.data?.length ? (
         <section className="section">
           <div className="container">
+            
             <div className="sponsored-project">
               <Image
                 src={

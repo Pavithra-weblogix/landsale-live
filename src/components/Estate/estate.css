@@ -428,10 +428,11 @@
   margin-top: 20px;
 }
 
-.hero-buttons a {
+.hero-buttons button {
   display: block;
   font-size: 16px;
   padding: 12px 30px;
+  width: 100%;
 }
 
 .btn-outline.full {
@@ -599,6 +600,85 @@
   position: relative;
 }
 
+/* Overlay */
+.enquiry-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal */
+.enquiry-modal {
+  background: #fff;
+  padding: 30px;
+  width: 100%;
+  max-width: 420px;
+  border-radius: 10px;
+  position: relative;
+  animation: popupFade 0.3s ease;
+}
+
+/* Close Button */
+.enquiry-modal .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  opacity: 1;
+  visibility: visible;
+  color: #000000;
+}
+
+.enquiry-modal .close-btn:before {
+  content: none;
+}
+
+.enquiry-modal h3 {
+  font-size: 24px;
+}
+
+.enquiry-modal p {
+  margin-bottom: 15px;;
+}
+
+/* Form */
+.enquiry-form input,
+.enquiry-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.enquiry-form textarea {
+  resize: none;
+}
+
+.enquiry-form button {
+  margin-top: 10px;
+}
+
+/* Animation */
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
 /* RESPONSIVE */
 @media (max-width: 992px) {
   .top-grid,
@@ -606,4 +686,22 @@
   .location-box {
     grid-template-columns: 1fr;
   }
+}
+
+@media only screen and (max-width: 767px) {
+  .header-fixed.fixed-header {
+    height: auto;
+    padding: 3px 0px;
+  }
+  .hero-overlay {
+        left: 10px;
+    right: 10px;
+  }
+  .btn-outline.full {
+        width: auto;
+  }
+  .location-location a {
+    margin-bottom: 20px;
+  }
+
 }
