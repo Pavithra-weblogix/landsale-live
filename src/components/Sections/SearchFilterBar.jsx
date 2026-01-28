@@ -1,8 +1,9 @@
 "use client";
 
 import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
+import { buildUrlFromFilters } from "@/lib/utils/filters/buildUrlFromFilters";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function SearchFilterBar() {
@@ -18,6 +19,19 @@ export default function SearchFilterBar() {
 
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
+
+  const filteredMinOptions = PRICE_OPTIONS.filter((v) => {
+    if (v === "Any") return true;
+    if (!priceMax) return true;
+    return Number(v) <= Number(priceMax);
+  });
+
+  const filteredMaxOptions = PRICE_OPTIONS.filter((v) => {
+    if (v === "Any") return true;
+    if (!priceMin) return true;
+    return Number(v) >= Number(priceMin);
+  });
 
   // Close on outside click
   useEffect(() => {
@@ -60,6 +74,17 @@ export default function SearchFilterBar() {
     setPriceMin(filters.min_price?.toString() || "");
     setPriceMax(filters.max_price?.toString() || "");
   }, [params]);
+  useEffect(() => {
+    if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
+      setPriceMax("");
+    }
+  }, [priceMin]);
+
+  useEffect(() => {
+    if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
+      setPriceMin("");
+    }
+  }, [priceMax]);
 
   const clearFilters = () => {
     setPriceMin("");
@@ -69,6 +94,22 @@ export default function SearchFilterBar() {
   };
 
   const applyFilters = () => {
+    if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
+      // Min price cannot be greater than Max price
+      return;
+    }
+
+    const filters = {
+      min_price: priceMin ? Number(priceMin) : undefined,
+      max_price: priceMax ? Number(priceMax) : undefined,
+    };
+    const segment = buildUrlFromFilters(filters);
+
+    const cleanPath = pathname
+      .split("/")
+      .filter((part) => !/^(over-|under-|between-)/.test(part))
+      .join("/");
+
     console.log({
       search,
       priceMin,
@@ -76,6 +117,9 @@ export default function SearchFilterBar() {
       landMin,
       landMax,
     });
+    const finalUrl = segment === "/" ? cleanPath : `${cleanPath}${segment}`;
+
+    router.push(finalUrl);
     setOpenFilters(false);
   };
 
@@ -152,7 +196,7 @@ export default function SearchFilterBar() {
                     value={priceMin}
                     onChange={(e) => setPriceMin(e.target.value)}
                   >
-                    {PRICE_OPTIONS.map((v) => (
+                    {filteredMinOptions.map((v) => (
                       <option key={v} value={v === "Any" ? "" : v}>
                         {v === "Any" ? "Any" : `$${Number(v).toLocaleString()}`}
                       </option>
@@ -165,7 +209,7 @@ export default function SearchFilterBar() {
                     value={priceMax}
                     onChange={(e) => setPriceMax(e.target.value)}
                   >
-                    {PRICE_OPTIONS.map((v) => (
+                    {filteredMaxOptions.map((v) => (
                       <option key={v} value={v === "Any" ? "" : v}>
                         {v === "Any" ? "Any" : `$${Number(v).toLocaleString()}`}
                       </option>
