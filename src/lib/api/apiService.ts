@@ -15,9 +15,7 @@ export async function getStateCount() {
 }
 
 // Listing
-export async function getListing(
-  params: Record<string, string | number>,
-) {
+export async function getListing(params: Record<string, string | number>) {
   const query = new URLSearchParams(
     Object.entries(params).map(([key, value]) => [key, String(value)]),
   ).toString();
@@ -29,10 +27,12 @@ export async function getListing(
 
 // Filter Listing
 export async function getListingsWithFilters(
-  params: Record<string, string | number>,
+  params: Record<string, string | number | undefined>,
 ) {
   const query = new URLSearchParams(
-    Object.entries(params).map(([key, value]) => [key, String(value)]),
+    Object.entries(params)
+      .filter(([, value]) => value !== undefined)
+      .map(([key, value]) => [key, String(value)]),
   ).toString();
 
   const res = await fetch(`${SITE_URL}/api/lfs/filter-api?${query}`);

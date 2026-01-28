@@ -93,6 +93,11 @@ export default function SearchFilterBar() {
     setLandMax("");
   };
 
+  const activeFilterCount = [priceMin || priceMax ? 1 : 0].reduce(
+    (totalCount, currentItem) => totalCount + currentItem,
+    0,
+  );
+
   const applyFilters = () => {
     if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
       // Min price cannot be greater than Max price
@@ -145,7 +150,9 @@ export default function SearchFilterBar() {
           className="pillBtn pillPrimary"
           onClick={() => setOpenFilters(true)}
         >
-          {/* <span className="pillCount">1</span> */}
+          {activeFilterCount > 0 && (
+            <span className="pillCount">{activeFilterCount}</span>
+          )}
           <svg
             width="22"
             height="22"
