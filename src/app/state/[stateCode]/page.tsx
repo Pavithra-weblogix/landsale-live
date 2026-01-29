@@ -32,6 +32,7 @@ export default async function StatePage({
       exclusiveListing={exclusiveListing}
       featuredListing={featuredListing}
       mainFilterListing={mainFilterListing?.data}
+      stateCode={stateCode}
     />
   );
 }

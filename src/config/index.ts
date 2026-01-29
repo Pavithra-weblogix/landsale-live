@@ -40,3 +40,14 @@ export const LAND_OPTIONS = [
   "2000",
   "5000",
 ];
+
+export const STATE_NAMES = [
+  { code: "nsw", name: "New South Wales" },
+  { code: "qld", name: "Queensland" },
+  { code: "wa", name: "Western Australia" },
+  { code: "vic", name: "Victoria" },
+  { code: "sa", name: "South Australia" },
+  { code: "act", name: "Australian Capital Territory" },
+  { code: "tas", name: "Tasmania" },
+  { code: "nt", name: "Northern Territory" },
+];

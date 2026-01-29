@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import "./header.css";
+import { STATE_NAMES } from "@/config";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -71,32 +72,13 @@ const Header = () => {
                           <li className="dropdown2">
                             <Link href="#">Land for sale</Link>
                             <ul>
-                              <li>
-                                <Link href="/state/nsw">New South Wales</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/qld">Queensland</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/wa">Western Australia</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/vic">Victoria</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/sa">South Australia</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/act">
-                                  Australian Capital Territory
-                                </Link>
-                              </li>
-                              <li>
-                                <Link href="/state/tas">Tasmania</Link>
-                              </li>
-                              <li>
-                                <Link href="/state/nt">Northern Territory</Link>
-                              </li>
+                              {STATE_NAMES.map((item) => (
+                                <li key={item.code}>
+                                  <Link href={`/state/${item.code}`}>
+                                    {item.name}
+                                  </Link>
+                                </li>
+                              ))}
                             </ul>
                           </li>
 
@@ -153,44 +135,24 @@ const Header = () => {
                   <li className="dropdown2">
                     <Link href="#">Land for sale</Link>
                     <ul>
-                      <li>
-                        <Link href="/state/nsw">New South Wales</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/qld">Queensland</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/wa">Western Australia</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/vic">Victoria</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/sa">South Australia</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/act">
-                          Australian Capital Territory
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/state/tas">Tasmania</Link>
-                      </li>
-                      <li>
-                        <Link href="/state/nt">Northern Territory</Link>
-                      </li>
+                      {STATE_NAMES.map((item) => (
+                        <li key={item.code}>
+                          <Link href={`/state/${item.code}`}>{item.name}</Link>
+                        </li>
+                      ))}
                     </ul>
                   </li>
-                  <li><Link href="/blog">Blog</Link></li>
-                  <li><Link href="/contact">Contact us</Link></li>
+                  <li>
+                    <Link href="/blog">Blog</Link>
+                  </li>
+                  <li>
+                    <Link href="/contact">Contact us</Link>
+                  </li>
                 </ul>
               </div>
             </div>
 
-            <div
-              className="close-btn"
-              onClick={() => setMobileOpen(false)}
-            >
+            <div className="close-btn" onClick={() => setMobileOpen(false)}>
               <span className="icon flaticon-cancel-1"></span>
             </div>
           </nav>

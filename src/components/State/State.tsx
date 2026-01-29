@@ -5,7 +5,7 @@ import Map, { Marker } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Link from "next/link";
 import "./state.css";
-import { MAPBOX_TOKEN } from "@/config";
+import { MAPBOX_TOKEN, STATE_NAMES } from "@/config";
 import ListingSlider from "@/components/Sections/ListingSlider";
 import SearchFilterBar from "@/components/Sections/SearchFilterBar";
 import Image from "next/image";
@@ -16,16 +16,22 @@ type StateProps = {
   exclusiveListing: LandListingResponse;
   featuredListing: LandListingResponse;
   mainFilterListing: FilterListing[];
+  stateCode: string;
 };
 
 const State = ({
   exclusiveListing,
   featuredListing,
   mainFilterListing,
+  stateCode,
 }: StateProps) => {
   const [expanded, setExpanded] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const stateName = STATE_NAMES.find(
+    (item) => item.code === stateCode.toLowerCase(),
+  )?.name;
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -266,7 +272,9 @@ const State = ({
       </section> */}
       <section className="top-search">
         <div className="container">
-          <h1 className="dynamic-title">Land for sale in New South Wales</h1>
+          {stateName && (
+            <h1 className="dynamic-title">Land for sale in {stateName}</h1>
+          )}
           <SearchFilterBar />
         </div>
       </section>

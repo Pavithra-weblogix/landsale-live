@@ -2,6 +2,7 @@
 import Link from "next/link";
 import "./footer.css";
 import Image from "next/image";
+import { STATE_NAMES } from "@/config";
 
 const Footer = () => {
   return (
@@ -18,27 +19,18 @@ const Footer = () => {
                 </div>
                 <div className="tf-collapse-content">
                   <ul className="mt-10 navigation-menu-footer">
-                    {[
-                      { name: "New South Wales", slug: "/state/nsw" },
-                      { name: "Queensland", slug: "/state/qld" },
-                      { name: "Western Australia", slug: "/state/wa" },
-                      { name: "Victoria", slug: "/state/vic" },
-                      { name: "South Australia", slug: "/state/sa" },
-                      {
-                        name: "Australian Capital Territory",
-                        slug: "/state/act",
-                      },
-                      { name: "Tasmania", slug: "/state/tas" },
-                    ].map((item) => (
-                      <li key={item.slug}>
-                        <Link
-                          href={item.slug}
-                          className="caption-1 text-variant-2"
-                        >
-                          {item.name}
-                        </Link>
-                      </li>
-                    ))}
+                    {STATE_NAMES.filter((item) => item.code !== "nt").map(
+                      (item) => (
+                        <li key={item.code}>
+                          <Link
+                            href={`/state/${item.code}`}
+                            className="caption-1 text-variant-2"
+                          >
+                            {item.name}
+                          </Link>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               </div>
