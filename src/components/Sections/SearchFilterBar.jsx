@@ -3,7 +3,12 @@
 import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
 import { buildUrlFromFilters } from "@/lib/utils/filters/buildUrlFromFilters";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function SearchFilterBar() {
@@ -14,12 +19,14 @@ export default function SearchFilterBar() {
   const [priceMax, setPriceMax] = useState("");
   const [landMin, setLandMin] = useState("");
   const [landMax, setLandMax] = useState("");
+  const [listingType, setListingType] = useState("");
 
   const modalRef = useRef(null);
 
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const filteredMinOptions = PRICE_OPTIONS.filter((v) => {
     if (v === "Any") return true;
@@ -74,29 +81,31 @@ export default function SearchFilterBar() {
     setPriceMin(filters.min_price?.toString() || "");
     setPriceMax(filters.max_price?.toString() || "");
   }, [params]);
-  useEffect(() => {
-    if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
-      setPriceMax("");
-    }
-  }, [priceMin]);
 
   useEffect(() => {
-    if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
+    setListingType(searchParams.get("type") || "");
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!priceMin || !priceMax) return;
+    if (Number(priceMin) > Number(priceMax)) {
       setPriceMin("");
+      setPriceMax("");
     }
-  }, [priceMax]);
+  }, [priceMin, priceMax]);
 
   const clearFilters = () => {
     setPriceMin("");
     setPriceMax("");
     setLandMin("");
     setLandMax("");
+    setListingType("");
   };
 
-  const activeFilterCount = [priceMin || priceMax ? 1 : 0].reduce(
-    (totalCount, currentItem) => totalCount + currentItem,
-    0,
-  );
+  const activeFilterCount = [
+    priceMin || priceMax ? 1 : 0,
+    listingType ? 1 : 0,
+  ].reduce((totalCount, currentItem) => totalCount + currentItem, 0);
 
   const applyFilters = () => {
     if (priceMin && priceMax && Number(priceMin) > Number(priceMax)) {
@@ -110,10 +119,20 @@ export default function SearchFilterBar() {
     };
     const segment = buildUrlFromFilters(filters);
 
-    const cleanPath = pathname
-      .split("/")
-      .filter((part) => !/^(over-|under-|between-)/.test(part))
-      .join("/");
+    const cleanPath =
+      "/" +
+      pathname
+        .split("/")
+        .filter((part) => !/^(over-|under-|between-)/.test(part))
+        .join("/");
+
+    const query = new URLSearchParams();
+
+    if (listingType) {
+      query.set("type", listingType);
+    }
+
+    const queryString = query.toString();
 
     console.log({
       search,
@@ -122,7 +141,10 @@ export default function SearchFilterBar() {
       landMin,
       landMax,
     });
-    const finalUrl = segment === "/" ? cleanPath : `${cleanPath}${segment}`;
+
+    const finalUrl =
+      `${cleanPath}${segment === "/" ? "" : segment}` +
+      (queryString ? `?${queryString}` : "");
 
     router.push(finalUrl);
     setOpenFilters(false);
@@ -267,11 +289,15 @@ export default function SearchFilterBar() {
               <div className="filterTitle">Listing Type</div>
               <div className="filterGrid">
                 <div>
-                  <select className="form-select">
-                    <option>Any</option>
-                    <option>Estate</option>
-                    <option>Private Seller</option>
-                    <option>Agent</option>
+                  <select
+                    className="form-select"
+                    value={listingType}
+                    onChange={(e) => setListingType(e.target.value)}
+                  >
+                    <option value="">Any</option>
+                    <option value="estate">Estate</option>
+                    <option value="private_seller">Private Seller</option>
+                    <option value="agent">Agent</option>
                   </select>
                 </div>
                 

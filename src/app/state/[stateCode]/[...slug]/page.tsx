@@ -4,16 +4,21 @@ import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 
 export default async function StatePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ stateCode: string; slug?: string[] }>;
+  searchParams: Promise<{ type?: string }>;
 }) {
   const { stateCode, slug = [] } = await params;
+  const { type } = await searchParams;
+
+  const { min_price, max_price } = parseFiltersFromUrl(slug);
+
   const exclusiveListing = await getListing({
     exclusive: "yes",
     limit: 1,
     state: stateCode,
   });
-  const { min_price, max_price } = parseFiltersFromUrl(slug);
 
   const featuredListing = await getListing({
     featured: "yes",
@@ -25,6 +30,7 @@ export default async function StatePage({
     limit: 50,
     min_price,
     max_price,
+    ...(type ? { category: type } : {}),
   });
 
   return (

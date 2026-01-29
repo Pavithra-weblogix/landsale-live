@@ -3,10 +3,14 @@ import { getListing, getListingsWithFilters } from "@/lib/api/apiService";
 
 export default async function StatePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ stateCode: string }>;
+  searchParams: Promise<{ type?: string }>;
 }) {
   const { stateCode } = await params;
+  const { type } = await searchParams;
+
   const exclusiveListing = await getListing({
     exclusive: "yes",
     limit: 1,
@@ -20,6 +24,7 @@ export default async function StatePage({
     state: stateCode,
     // page: 1,
     limit: 50,
+    ...(type ? { category: type } : {}),
   });
 
   return (
