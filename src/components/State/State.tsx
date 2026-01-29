@@ -1,16 +1,17 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import Map, { Marker } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Link from "next/link";
 import "./state.css";
-import { MAPBOX_TOKEN, STATE_NAMES } from "@/config";
+import { MAPBOX_TOKEN, SORT_OPTIONS, STATE_NAMES } from "@/config";
 import ListingSlider from "@/components/Sections/ListingSlider";
 import SearchFilterBar from "@/components/Sections/SearchFilterBar";
 import Image from "next/image";
 import { FilterListing, LandListingResponse } from "@/types/apiTypes";
 import { formatPrice } from "@/lib/utils/formatPrice";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
@@ -25,9 +26,13 @@ const State = ({
   mainFilterListing,
   stateCode,
 }: StateProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [expanded, setExpanded] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState("");
 
   const stateName = STATE_NAMES.find(
     (item) => item.code === stateCode.toLowerCase(),
@@ -45,6 +50,15 @@ const State = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const sortFromQuery = (searchParams.get("sort-by") || "").toLowerCase();
+    const isValidSort = SORT_OPTIONS.some(
+      (item) => item.value === sortFromQuery,
+    );
+
+    setSortBy(isValidSort ? sortFromQuery : "");
+  }, [searchParams]);
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -156,6 +170,22 @@ const State = ({
     { title: "Hunter Valley", subtitle: "NSW", href: "#" },
     { title: "Central Coast", subtitle: "Central Coast", href: "#" },
   ];
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSortBy(value);
+
+    const query = new URLSearchParams(window.location.search);
+
+    if (value) {
+      query.set("sort-by", value);
+    } else {
+      query.delete("sort-by");
+    }
+
+    const queryString = query.toString();
+
+    router.push(`?${queryString}`);
+  };
   return (
     <>
       {/* <section className="section-top-map find_map_location">
@@ -285,12 +315,17 @@ const State = ({
           </div>
           <div className="short_by_inner ">
             <label>Sort by:</label>
-            <select name="orderby" className="form-select">
-              <option value="featured">Featured</option>
-              <option value="priceasc">Price (Low to High)</option>
-              <option value="price-desc">Price (High to Low)</option>
-              <option value="year-desc">Year Made (High to Low)</option>
-              <option value="year-asc">Year Made (Low to High)</option>
+            <select
+              name="orderby"
+              className="form-select"
+              value={sortBy}
+              onChange={handleSortChange}
+            >
+              {SORT_OPTIONS.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
             </select>
           </div>
         </div>

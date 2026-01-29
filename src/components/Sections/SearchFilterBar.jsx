@@ -1,6 +1,6 @@
 "use client";
 
-import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
+import { LAND_OPTIONS, LISTING_TYPES, PRICE_OPTIONS } from "@/config";
 import { buildUrlFromFilters } from "@/lib/utils/filters/buildUrlFromFilters";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 import {
@@ -83,7 +83,12 @@ export default function SearchFilterBar() {
   }, [params]);
 
   useEffect(() => {
-    setListingType(searchParams.get("type") || "");
+    const typeFromQuery = (searchParams.get("type") || "").toLowerCase();
+    const isValidType = LISTING_TYPES.some(
+      (item) => item.value === typeFromQuery,
+    );
+
+    setListingType(isValidType ? typeFromQuery : "");
   }, [searchParams]);
 
   useEffect(() => {
@@ -119,16 +124,17 @@ export default function SearchFilterBar() {
     };
     const segment = buildUrlFromFilters(filters);
 
-    const cleanPath =
-      pathname
-        .split("/")
-        .filter((part) => !/^(over-|under-|between-)/.test(part))
-        .join("/");
+    const cleanPath = pathname
+      .split("/")
+      .filter((part) => !/^(over-|under-|between-)/.test(part))
+      .join("/");
 
-    const query = new URLSearchParams();
+    const query = new URLSearchParams(window.location.search);
 
     if (listingType) {
       query.set("type", listingType);
+    } else {
+      query.delete("type");
     }
 
     const queryString = query.toString();
@@ -293,10 +299,11 @@ export default function SearchFilterBar() {
                     value={listingType}
                     onChange={(e) => setListingType(e.target.value)}
                   >
-                    <option value="">Any</option>
-                    <option value="estate">Estate</option>
-                    <option value="private_seller">Private Seller</option>
-                    <option value="agent">Agent</option>
+                    {LISTING_TYPES.map((item) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 

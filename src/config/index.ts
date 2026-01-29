@@ -40,6 +40,19 @@ export const LAND_OPTIONS = [
   "2000",
   "5000",
 ];
+export const LISTING_TYPES = [
+  { value: "", label: "Any" },
+  { value: "estate", label: "Estate" },
+  { value: "private_seller", label: "Private Seller" },
+  { value: "agent", label: "Agent" },
+];
+export const SORT_OPTIONS = [
+  { value: "featured", label: "Featured" },
+  { value: "price_asc", label: "Price (Low to High)" },
+  { value: "price_desc", label: "Price (High to Low)" },
+  { value: "year-desc", label: "Year Made (High to Low)" },
+  { value: "year-asc", label: "Year Made (Low to High)" },
+];
 
 export const STATE_NAMES = [
   { code: "nsw", name: "New South Wales" },
