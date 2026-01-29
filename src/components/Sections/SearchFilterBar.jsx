@@ -120,7 +120,6 @@ export default function SearchFilterBar() {
     const segment = buildUrlFromFilters(filters);
 
     const cleanPath =
-      "/" +
       pathname
         .split("/")
         .filter((part) => !/^(over-|under-|between-)/.test(part))
