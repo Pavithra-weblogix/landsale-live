@@ -7,10 +7,10 @@ export default async function StatePage({
   searchParams,
 }: {
   params: Promise<{ stateCode: string; slug?: string[] }>;
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; "sort-by"?: string }>;
 }) {
   const { stateCode, slug = [] } = await params;
-  const { type } = await searchParams;
+  const { type, "sort-by": sortBy } = await searchParams;
 
   const { min_price, max_price } = parseFiltersFromUrl(slug);
 
@@ -31,6 +31,7 @@ export default async function StatePage({
     min_price,
     max_price,
     ...(type ? { category: type } : {}),
+    ...(sortBy ? { order: sortBy } : {}),
   });
 
   return (

@@ -6,10 +6,10 @@ export default async function StatePage({
   searchParams,
 }: {
   params: Promise<{ stateCode: string }>;
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; "sort-by"?: string }>;
 }) {
   const { stateCode } = await params;
-  const { type } = await searchParams;
+  const { type, "sort-by": sortBy } = await searchParams;
 
   const exclusiveListing = await getListing({
     exclusive: "yes",
@@ -25,6 +25,7 @@ export default async function StatePage({
     // page: 1,
     limit: 50,
     ...(type ? { category: type } : {}),
+    ...(sortBy ? { order: sortBy } : {}),
   });
 
   return (
