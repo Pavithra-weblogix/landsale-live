@@ -1,4 +1,4 @@
-import Estate from "@/components/Estate/Estate";
+import Estate from "@/components/estate/Estate";
 
 export default function EstatePage() {
   return <Estate />;

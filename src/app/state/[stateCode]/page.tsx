@@ -1,4 +1,4 @@
-import State from "@/components/State/State";
+import State from "@/components/state/State";
 import { getListing, getListingsWithFilters } from "@/lib/api/apiService";
 
 export default async function StatePage({

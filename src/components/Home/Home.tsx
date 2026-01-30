@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { SITE_URL } from "@/config";
-import ListingSlider from "@/components/Sections/ListingSlider";
+import ListingSlider from "@/components/sections/ListingSlider";
 
 type SuggestionGroupProps = {
   title: string;

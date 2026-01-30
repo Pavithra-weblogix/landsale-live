@@ -1,4 +1,4 @@
-import { Home } from "@/components/Home/Home";
+import { Home } from "@/components/home/Home";
 import { getBlogs, getListing, getStateCount } from "@/lib/api/apiService";
 
 export const dynamic = "force-dynamic";

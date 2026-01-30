@@ -6,8 +6,10 @@ import "./globals.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
+import ScrollToTopGlobal from "@/components/navigation/ScrollToTopGlobal";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +36,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased body`}
       >
+        <Suspense fallback={null}>
+          <ScrollToTopGlobal />
+        </Suspense>
         <div id="wrapper">
           <div id="pagee" className="clearfix">
             <Header />

@@ -1,4 +1,4 @@
-import ListingDetail from "@/components/Landdetails/Landdetails";
+import ListingDetail from "@/components/landdetails/Landdetails";
 
 export default function LandDetailsPage() {
   return <ListingDetail />;

@@ -1,4 +1,4 @@
-import State from "@/components/State/State";
+import State from "@/components/state/State";
 import { getListing, getListingsWithFilters } from "@/lib/api/apiService";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 
