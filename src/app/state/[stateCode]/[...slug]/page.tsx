@@ -7,10 +7,14 @@ export default async function StatePage({
   searchParams,
 }: {
   params: Promise<{ stateCode: string; slug?: string[] }>;
-  searchParams: Promise<{ type?: string; "sort-by"?: string }>;
+  searchParams: Promise<{
+    type?: string;
+    "sort-by"?: string;
+    clickid?: string;
+  }>;
 }) {
   const { stateCode, slug = [] } = await params;
-  const { type, "sort-by": sortBy } = await searchParams;
+  const { type, "sort-by": sortBy, clickid } = await searchParams;
 
   const { min_price, max_price } = parseFiltersFromUrl(slug);
 
@@ -24,22 +28,25 @@ export default async function StatePage({
     featured: "yes",
     state: stateCode,
   });
-  const mainFilterListing = await getListingsWithFilters({
-    state: stateCode,
-    // page: 1,
-    limit: 50,
-    min_price,
-    max_price,
-    ...(type ? { category: type } : {}),
-    ...(sortBy ? { order: sortBy } : {}),
-  });
 
+  let mainFilterListing = null;
+  if (!clickid) {
+    mainFilterListing = await getListingsWithFilters({
+      state: stateCode,
+      min_price,
+      max_price,
+      ...(type ? { category: type } : {}),
+      ...(sortBy ? { order: sortBy } : {}),
+    });
+  }
   return (
     <State
       exclusiveListing={exclusiveListing}
       featuredListing={featuredListing}
-      mainFilterListing={mainFilterListing?.data}
+      mainFilterListing={mainFilterListing}
       stateCode={stateCode}
+      filters={{ min_price, max_price, type, sortBy }}
+      clickidQuery={clickid}
     />
   );
 }

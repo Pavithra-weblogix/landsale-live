@@ -1141,3 +1141,38 @@
     gap: 10px;
   }
 }
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 40px;
+}
+
+.page-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #d0d5d2;
+  background: #ffffff;
+  color: #2f4f43;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+  background: #2f4f43;
+  color: #ffffff;
+}
+
+.page-info {
+  font-size: 14px;
+  color: #4a5a55;
+  font-weight: 500;
+}

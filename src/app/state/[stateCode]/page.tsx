@@ -6,10 +6,14 @@ export default async function StatePage({
   searchParams,
 }: {
   params: Promise<{ stateCode: string }>;
-  searchParams: Promise<{ type?: string; "sort-by"?: string }>;
+  searchParams: Promise<{
+    type?: string;
+    "sort-by"?: string;
+    clickid?: string;
+  }>;
 }) {
   const { stateCode } = await params;
-  const { type, "sort-by": sortBy } = await searchParams;
+  const { type, "sort-by": sortBy, clickid } = await searchParams;
 
   const exclusiveListing = await getListing({
     exclusive: "yes",
@@ -20,20 +24,22 @@ export default async function StatePage({
     featured: "yes",
     state: stateCode,
   });
-  const mainFilterListing = await getListingsWithFilters({
-    state: stateCode,
-    // page: 1,
-    limit: 50,
-    ...(type ? { category: type } : {}),
-    ...(sortBy ? { order: sortBy } : {}),
-  });
-
+  let mainFilterListing = null;
+  if (!clickid) {
+    mainFilterListing = await getListingsWithFilters({
+      state: stateCode,
+      ...(type ? { category: type } : {}),
+      ...(sortBy ? { order: sortBy } : {}),
+    });
+  }
   return (
     <State
       exclusiveListing={exclusiveListing}
       featuredListing={featuredListing}
-      mainFilterListing={mainFilterListing?.data}
+      mainFilterListing={mainFilterListing}
       stateCode={stateCode}
+      filters={{ type, sortBy }}
+      clickidQuery={clickid}
     />
   );
 }

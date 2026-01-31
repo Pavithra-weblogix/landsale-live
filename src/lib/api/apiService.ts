@@ -29,6 +29,7 @@ export async function getListing(params: Record<string, string | number>) {
 export async function getListingsWithFilters(
   params: Record<string, string | number | undefined>,
 ) {
+  params.limit = 25;
   const query = new URLSearchParams(
     Object.entries(params)
       .filter(([, value]) => value !== undefined)

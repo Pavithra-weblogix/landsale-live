@@ -9,15 +9,28 @@ import { MAPBOX_TOKEN, SORT_OPTIONS, STATE_NAMES } from "@/config";
 import ListingSlider from "@/components/sections/ListingSlider";
 import SearchFilterBar from "@/components/sections/SearchFilterBar";
 import Image from "next/image";
-import { FilterListing, LandListingResponse } from "@/types/apiTypes";
+import {
+  FilterListing,
+  FilterListingResponse,
+  LandListingResponse,
+} from "@/types/apiTypes";
 import { formatPrice } from "@/lib/utils/formatPrice";
 import { useRouter, useSearchParams } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { getListingsWithFilters } from "@/lib/api/apiService";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
   featuredListing: LandListingResponse;
-  mainFilterListing: FilterListing[];
+  mainFilterListing: FilterListingResponse;
   stateCode: string;
+  clickidQuery?: string;
+  filters: {
+    type?: string;
+    sortBy?: string;
+    min_price?: number;
+    max_price?: number;
+  };
 };
 
 const State = ({
@@ -25,6 +38,8 @@ const State = ({
   featuredListing,
   mainFilterListing,
   stateCode,
+  filters,
+  clickidQuery,
 }: StateProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -37,6 +52,17 @@ const State = ({
   const stateName = STATE_NAMES.find(
     (item) => item.code === stateCode.toLowerCase(),
   )?.name;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [listings, setListings] =
+    useState<FilterListingResponse>(mainFilterListing);
+
+  useEffect(() => {
+    if (mainFilterListing) {
+      setListings(mainFilterListing);
+    }
+  }, [mainFilterListing]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -59,6 +85,32 @@ const State = ({
 
     setSortBy(isValidSort ? sortFromQuery : "");
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!clickidQuery) {
+      setCurrentPage(1);
+      return;
+    }
+
+    const pageFromStorage = localStorage.getItem(clickidQuery);
+    const page = pageFromStorage ? Number(pageFromStorage) : 1;
+
+    setCurrentPage(page);
+    fetchPageData(page);
+  }, [filters, stateCode]);
+
+  const fetchPageData = async (page: number) => {
+    const data = await getListingsWithFilters({
+      state: stateCode,
+      ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
+      ...(filters?.max_price ? { max_price: filters?.max_price } : {}),
+      ...(filters?.type ? { category: filters?.type } : {}),
+      ...(filters?.sortBy ? { order: filters?.sortBy } : {}),
+      page: page,
+    });
+
+    setListings(data);
+  };
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -182,9 +234,31 @@ const State = ({
       query.delete("sort-by");
     }
 
+    query.delete("clickid");
+
     const queryString = query.toString();
 
     router.push(`?${queryString}`);
+  };
+
+  const handlePrevPageClick = () => {
+    const prevPage = currentPage - 1;
+    const clickId = uuidv4();
+    localStorage.setItem(clickId, prevPage.toString());
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("clickid", clickId);
+    router.push(`${window.location.pathname}?${params.toString()}`);
+  };
+
+  const handleNextPageClick = () => {
+    const nextPage = currentPage + 1;
+    const clickId = uuidv4();
+    localStorage.setItem(clickId, nextPage.toString());
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("clickid", clickId);
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
   return (
     <>
@@ -379,7 +453,7 @@ const State = ({
       <section className="land_list section">
         <div className="container">
           <div className="card-grid">
-            {mainFilterListing.map((item) => (
+            {listings?.data.map((item) => (
               <Link href={`/${item.slug}`} key={item?.id}>
                 <article className="land-card">
                   <div className="image_card">
@@ -406,6 +480,15 @@ const State = ({
                 </article>
               </Link>
             ))}
+          </div>
+          <div className="pagination">
+            <button className="page-btn" onClick={handlePrevPageClick}>
+              &lt;
+            </button>
+            <span className="page-info">{currentPage} of </span>
+            <button className="page-btn" onClick={handleNextPageClick}>
+              &gt;
+            </button>
           </div>
         </div>
       </section>
