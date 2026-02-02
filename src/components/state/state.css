@@ -1176,3 +1176,13 @@
   color: #4a5a55;
   font-weight: 500;
 }
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #2f4f43;
+}
+
+.page-btn:disabled:hover {
+  background: #f0f0f0;
+}

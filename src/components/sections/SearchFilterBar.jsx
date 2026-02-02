@@ -139,14 +139,6 @@ export default function SearchFilterBar() {
 
     const queryString = query.toString();
 
-    console.log({
-      search,
-      priceMin,
-      priceMax,
-      landMin,
-      landMax,
-    });
-
     const finalUrl =
       `${cleanPath}${segment === "/" ? "" : segment}` +
       (queryString ? `?${queryString}` : "");

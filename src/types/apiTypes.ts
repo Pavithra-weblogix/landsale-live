@@ -68,5 +68,9 @@ export interface FilterListing {
 export interface FilterListingResponse {
   page: number;
   count: number;
+  total_pages: number;
+  total: number;
+  limit: number;
+  seed: number;
   data: FilterListing[];
 }

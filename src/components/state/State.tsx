@@ -18,6 +18,7 @@ import { formatPrice } from "@/lib/utils/formatPrice";
 import { useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { getListingsWithFilters } from "@/lib/api/apiService";
+import { getSessionSeed } from "@/lib/utils/session/getSessionSeed";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
@@ -53,14 +54,32 @@ const State = ({
     (item) => item.code === stateCode.toLowerCase(),
   )?.name;
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [listings, setListings] =
     useState<FilterListingResponse>(mainFilterListing);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(mainFilterListing?.total_pages);
+  const [totalProperties, setTotalProperties] = useState(
+    mainFilterListing?.total,
+  );
+
+  const isPrevDisabled = currentPage <= 1;
+  const isNextDisabled = totalPages ? currentPage >= totalPages : false;
+
+  const firstItemIndex =
+    listings?.page && listings?.page <= listings?.total_pages
+      ? (listings?.page - 1) * listings?.limit + 1
+      : 0;
+
+  const lastItemIndex =
+    listings?.count && listings?.total
+      ? Math.min(firstItemIndex + listings?.count - 1, listings?.total)
+      : 0;
 
   useEffect(() => {
     if (mainFilterListing) {
       setListings(mainFilterListing);
+      setTotalPages(mainFilterListing?.total_pages);
+      setTotalProperties(mainFilterListing?.total);
     }
   }, [mainFilterListing]);
 
@@ -100,6 +119,7 @@ const State = ({
   }, [filters, stateCode]);
 
   const fetchPageData = async (page: number) => {
+    const seed = getSessionSeed();
     const data = await getListingsWithFilters({
       state: stateCode,
       ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
@@ -107,9 +127,12 @@ const State = ({
       ...(filters?.type ? { category: filters?.type } : {}),
       ...(filters?.sortBy ? { order: filters?.sortBy } : {}),
       page: page,
+      seed,
     });
 
     setListings(data);
+    setTotalPages(data.total_pages);
+    setTotalProperties(data.total);
   };
 
   const toggleDropdown = (name: string) => {
@@ -242,16 +265,29 @@ const State = ({
   };
 
   const handlePrevPageClick = () => {
+    if (isPrevDisabled) {
+      return;
+    }
     const prevPage = currentPage - 1;
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (prevPage === 1) {
+      params.delete("clickid");
+      router.push(`${window.location.pathname}?${params.toString()}`);
+      return;
+    }
+
     const clickId = uuidv4();
     localStorage.setItem(clickId, prevPage.toString());
-
-    const params = new URLSearchParams(searchParams.toString());
     params.set("clickid", clickId);
+
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   const handleNextPageClick = () => {
+    if (isNextDisabled) {
+      return;
+    }
     const nextPage = currentPage + 1;
     const clickId = uuidv4();
     localStorage.setItem(clickId, nextPage.toString());
@@ -385,7 +421,14 @@ const State = ({
       <div className="container">
         <div className="short_by">
           <div className="short_by_count">
-            <p>Showing 1 - 25 of 40788 properties</p>
+            {totalProperties === 0 ? (
+              <p>No properties found</p>
+            ) : firstItemIndex > 0 && lastItemIndex > 0 ? (
+              <p>
+                Showing {firstItemIndex} - {lastItemIndex} of {totalProperties}{" "}
+                properties
+              </p>
+            ) : null}
           </div>
           <div className="short_by_inner ">
             <label>Sort by:</label>
@@ -452,44 +495,58 @@ const State = ({
       ) : null}
       <section className="land_list section">
         <div className="container">
-          <div className="card-grid">
-            {listings?.data.map((item) => (
-              <Link href={`/${item.slug}`} key={item?.id}>
-                <article className="land-card">
-                  <div className="image_card">
-                    <span className="badge">PrivateEstate</span>
-                    {item.image && <img src={item.image} alt={item.name} />}
-                  </div>
-
-                  <div className="info_content">
-                    <h3>{item.name}</h3>
-
-                    <p className="location">
-                      <i className="icon icon-mapPin"></i> {item.location}
-                    </p>
-
-                    <div className="footer_data">
-                      <p className="price">
-                        {item.price
-                          ? formatPrice(item.price)
-                          : "Price on application"}
-                      </p>
-                      <i className="icon icon-arr-r"></i>
+          {listings?.data?.length ? (
+            <div className="card-grid">
+              {listings?.data.map((item) => (
+                <Link href={`/${item.slug}`} key={item?.id}>
+                  <article className="land-card">
+                    <div className="image_card">
+                      <span className="badge">PrivateEstate</span>
+                      {item.image && <img src={item.image} alt={item.name} />}
                     </div>
-                  </div>
-                </article>
-              </Link>
-            ))}
-          </div>
-          <div className="pagination">
-            <button className="page-btn" onClick={handlePrevPageClick}>
-              &lt;
-            </button>
-            <span className="page-info">{currentPage} of </span>
-            <button className="page-btn" onClick={handleNextPageClick}>
-              &gt;
-            </button>
-          </div>
+
+                    <div className="info_content">
+                      <h3>{item.name}</h3>
+
+                      <p className="location">
+                        <i className="icon icon-mapPin"></i> {item.location}
+                      </p>
+
+                      <div className="footer_data">
+                        <p className="price">
+                          {item.price
+                            ? formatPrice(item.price)
+                            : "Price on application"}
+                        </p>
+                        <i className="icon icon-arr-r"></i>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          ) : null}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                className="page-btn"
+                onClick={handlePrevPageClick}
+                disabled={isPrevDisabled}
+              >
+                &lt;
+              </button>
+              <span className="page-info">
+                {currentPage} of {totalPages || 1}
+              </span>
+              <button
+                className="page-btn"
+                onClick={handleNextPageClick}
+                disabled={isNextDisabled}
+              >
+                &gt;
+              </button>
+            </div>
+          )}
         </div>
       </section>
       <section className="spot_lite">
