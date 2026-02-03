@@ -15,15 +15,14 @@ import {
   LandListingResponse,
 } from "@/types/apiTypes";
 import { formatPrice } from "@/lib/utils/formatPrice";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { getListingsWithFilters } from "@/lib/api/apiService";
-import { getSessionSeed } from "@/lib/utils/session/getSessionSeed";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
   featuredListing: LandListingResponse;
-  mainFilterListing: FilterListingResponse;
+
   stateCode: string;
   clickidQuery?: string;
   filters: {
@@ -37,30 +36,29 @@ type StateProps = {
 const State = ({
   exclusiveListing,
   featuredListing,
-  mainFilterListing,
+
   stateCode,
   filters,
   clickidQuery,
 }: StateProps) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [expanded, setExpanded] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const stateName = STATE_NAMES.find(
     (item) => item.code === stateCode.toLowerCase(),
   )?.name;
 
-  const [listings, setListings] =
-    useState<FilterListingResponse>(mainFilterListing);
+  const [listings, setListings] = useState<FilterListingResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(mainFilterListing?.total_pages);
-  const [totalProperties, setTotalProperties] = useState(
-    mainFilterListing?.total,
-  );
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProperties, setTotalProperties] = useState(1);
 
   const isPrevDisabled = currentPage <= 1;
   const isNextDisabled = totalPages ? currentPage >= totalPages : false;
@@ -74,14 +72,6 @@ const State = ({
     listings?.count && listings?.total
       ? Math.min(firstItemIndex + listings?.count - 1, listings?.total)
       : 0;
-
-  useEffect(() => {
-    if (mainFilterListing) {
-      setListings(mainFilterListing);
-      setTotalPages(mainFilterListing?.total_pages);
-      setTotalProperties(mainFilterListing?.total);
-    }
-  }, [mainFilterListing]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -106,12 +96,15 @@ const State = ({
   }, [searchParams]);
 
   useEffect(() => {
-    if (!clickidQuery) {
-      setCurrentPage(1);
-      return;
-    }
+    sessionStorage.removeItem("listing_seed");
+    const newSeed = Math.floor(Math.random() * 999999);
+    sessionStorage.setItem("listing_seed", String(newSeed));
+  }, [pathname]);
 
-    const pageFromStorage = localStorage.getItem(clickidQuery);
+  useEffect(() => {
+    const pageFromStorage = clickidQuery
+      ? localStorage.getItem(clickidQuery)
+      : null;
     const page = pageFromStorage ? Number(pageFromStorage) : 1;
 
     setCurrentPage(page);
@@ -119,20 +112,33 @@ const State = ({
   }, [filters, stateCode]);
 
   const fetchPageData = async (page: number) => {
-    const seed = getSessionSeed();
-    const data = await getListingsWithFilters({
-      state: stateCode,
-      ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
-      ...(filters?.max_price ? { max_price: filters?.max_price } : {}),
-      ...(filters?.type ? { category: filters?.type } : {}),
-      ...(filters?.sortBy ? { order: filters?.sortBy } : {}),
-      page: page,
-      seed,
-    });
+    try {
+      setLoading(true);
 
-    setListings(data);
-    setTotalPages(data.total_pages);
-    setTotalProperties(data.total);
+      const seed = Number(sessionStorage.getItem("listing_seed"));
+      const data = await getListingsWithFilters({
+        state: stateCode,
+        ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
+        ...(filters?.max_price ? { max_price: filters?.max_price } : {}),
+        ...(filters?.type ? { category: filters?.type } : {}),
+        ...(filters?.sortBy ? { order: filters?.sortBy } : { seed }),
+        page: page,
+      });
+
+      if (data?.total_pages > 0 && page > data?.total_pages) {
+        setCurrentPage(1);
+        fetchPageData(1);
+        return;
+      }
+
+      setListings(data);
+      setTotalPages(data.total_pages);
+      setTotalProperties(data.total);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleDropdown = (name: string) => {
@@ -422,15 +428,17 @@ const State = ({
       <div className="container">
         <div className="short_by">
           <div className="short_by_count">
-            {totalProperties === 0 ? (
-              <p>No properties found</p>
-            ) : firstItemIndex > 0 && lastItemIndex > 0 ? (
-              <p>
-                Showing {firstItemIndex} - {lastItemIndex} of {totalProperties}{" "}
-                properties
-              </p>
-            ) : null}
+            {!loading &&
+              (totalProperties === 0 ? (
+                <p>No properties found</p>
+              ) : firstItemIndex > 0 && lastItemIndex > 0 ? (
+                <p>
+                  Showing {firstItemIndex} - {lastItemIndex} of{" "}
+                  {totalProperties} properties
+                </p>
+              ) : null)}
           </div>
+
           <div className="short_by_inner ">
             <label>Sort by:</label>
             <select
@@ -496,7 +504,9 @@ const State = ({
       ) : null}
       <section className="land_list section">
         <div className="container">
-          {listings?.data?.length ? (
+          {loading ? (
+            <></>
+          ) : listings?.data?.length ? (
             <div className="card-grid">
               {listings?.data.map((item) => (
                 <Link href={`/${item.slug}`} key={item?.id}>
@@ -527,7 +537,7 @@ const State = ({
               ))}
             </div>
           ) : null}
-          {totalPages > 1 && (
+          {!loading && totalPages > 1 && (
             <div className="pagination">
               <button
                 className="page-btn"

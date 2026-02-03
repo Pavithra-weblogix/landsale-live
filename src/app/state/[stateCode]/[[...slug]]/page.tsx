@@ -1,5 +1,5 @@
 import State from "@/components/state/State";
-import { getListing, getListingsWithFilters } from "@/lib/api/apiService";
+import { getListing } from "@/lib/api/apiService";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 
 export default async function StatePage({
@@ -29,21 +29,10 @@ export default async function StatePage({
     state: stateCode,
   });
 
-  let mainFilterListing = null;
-  if (!clickid) {
-    mainFilterListing = await getListingsWithFilters({
-      state: stateCode,
-      min_price,
-      max_price,
-      ...(type ? { category: type } : {}),
-      ...(sortBy ? { order: sortBy } : {}),
-    });
-  }
   return (
     <State
       exclusiveListing={exclusiveListing}
       featuredListing={featuredListing}
-      mainFilterListing={mainFilterListing}
       stateCode={stateCode}
       filters={{ min_price, max_price, type, sortBy }}
       clickidQuery={clickid}
