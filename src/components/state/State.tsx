@@ -296,6 +296,7 @@ const State = ({
     params.set("clickid", clickId);
     router.push(`${window.location.pathname}?${params.toString()}`);
   };
+
   return (
     <>
       {/* <section className="section-top-map find_map_location">
