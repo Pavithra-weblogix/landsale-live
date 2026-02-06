@@ -18,6 +18,7 @@ import { formatPrice } from "@/lib/utils/formatPrice";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { getListingsWithFilters } from "@/lib/api/apiService";
+import SkeletonCard from "../skeleton/SkeletonCard";
 
 type StateProps = {
   exclusiveListing: LandListingResponse;
@@ -505,7 +506,11 @@ const State = ({
       <section className="land_list section">
         <div className="container">
           {loading ? (
-            <></>
+            <div className="card-grid">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </div>
           ) : listings?.data?.length ? (
             <div className="card-grid">
               {listings?.data.map((item) => (
