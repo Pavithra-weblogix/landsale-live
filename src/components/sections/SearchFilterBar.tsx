@@ -1,6 +1,6 @@
 "use client";
 
-import { LAND_OPTIONS, LISTING_TYPES, PRICE_OPTIONS } from "@/config";
+import { LAND_OPTIONS, LISTING_TYPES, PRICE_OPTIONS, SITE_URL } from "@/config";
 import { buildUrlFromFilters } from "@/lib/utils/filters/buildUrlFromFilters";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 import {
@@ -15,6 +15,8 @@ export default function SearchFilterBar() {
   const [openFilters, setOpenFilters] = useState(false);
 
   const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   const [priceMin, setPriceMin] = useState("");
   const [draftPriceMin, setDraftPriceMin] = useState("");
@@ -31,7 +33,7 @@ export default function SearchFilterBar() {
   const [listingType, setListingType] = useState("");
   const [draftListingType, setDraftListingType] = useState("");
 
-  const modalRef = useRef(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const router = useRouter();
   const params = useParams();
@@ -52,8 +54,8 @@ export default function SearchFilterBar() {
 
   // Close on outside click
   useEffect(() => {
-    const handler = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
+    const handler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         setOpenFilters(false);
       }
     };
@@ -85,7 +87,7 @@ export default function SearchFilterBar() {
 
   // Close on ESC
   useEffect(() => {
-    const handler = (e) => {
+    const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpenFilters(false);
     };
     document.addEventListener("keydown", handler);
@@ -95,7 +97,9 @@ export default function SearchFilterBar() {
   useEffect(() => {
     if (!params?.slug) return;
 
-    const filters = parseFiltersFromUrl(params.slug);
+    const slugArray = Array.isArray(params.slug) ? params.slug : [params.slug];
+
+    const filters = parseFiltersFromUrl(slugArray);
 
     setPriceMin(filters.min_price?.toString() || "");
     setPriceMax(filters.max_price?.toString() || "");
@@ -184,6 +188,31 @@ export default function SearchFilterBar() {
     setOpenFilters(false);
   };
 
+  useEffect(() => {
+    if (!search.trim()) {
+      setSuggestions(null);
+      return;
+    }
+
+    const fetchSuggestions = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `${SITE_URL}/api/lfs/loc-search?keyword=${search}`,
+        );
+        const data = await res.json();
+        setSuggestions(data?.data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const timer = setTimeout(() => fetchSuggestions(), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   return (
     <>
       <div className="srpBar">
@@ -234,6 +263,32 @@ export default function SearchFilterBar() {
           </button>
         </div>
       </div>
+      {suggestions && (
+        <div className="srp-search-container">
+          <div className="srp-search-suggestions">
+            {loading ? (
+              <p>Loading...</p>
+            ) : suggestions.location?.length > 0 ? (
+              <div className="srp-suggestion-group">
+                <div className="srp-suggestion-title">suburb</div>
+                <ul className="srp-suggestion-list">
+                  {suggestions.location.map((item: any, i: number) => (
+                    <li
+                      key={i}
+                      className="srp-suggestion-link"
+                      onClick={() => {}}
+                    >
+                      {item.suburb}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p>No results found for '{search}'</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Overlay */}
       {openFilters && <div className="overlay" />}

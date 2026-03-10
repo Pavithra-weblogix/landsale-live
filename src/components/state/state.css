@@ -1186,3 +1186,58 @@
 .page-btn:disabled:hover {
   background: #f0f0f0;
 }
+
+.srp-search-container {
+  position: relative;
+  margin: 0 auto;
+}
+
+.srp-search-suggestions {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  z-index: 10;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.srp-suggestion-group {
+  margin-bottom: 10px;
+}
+
+.srp-suggestion-group:last-child {
+  margin-bottom: 0;
+}
+
+.srp-suggestion-title {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #000000;
+  margin-bottom: 10px;
+}
+
+.srp-suggestion-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.srp-suggestion-link {
+  width: 100%;
+  height: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #000000;
+}
+
+.srp-suggestion-link:hover {
+  background: #eee;
+}
