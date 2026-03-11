@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   LocationSearch: "/location-search",
   FilterApi: "/filter-api",
   LocSearch: "/loc-search",
+  LocationFormat: "/location-format",
 };
 
 export const PRICE_OPTIONS = [

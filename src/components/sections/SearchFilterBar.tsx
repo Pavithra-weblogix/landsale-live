@@ -198,10 +198,10 @@ export default function SearchFilterBar() {
       setLoading(true);
       try {
         const res = await fetch(
-          `${SITE_URL}/api/lfs/loc-search?keyword=${search}`,
+          `${SITE_URL}/api/lfs/location-format?keyword=${search}`,
         );
         const data = await res.json();
-        setSuggestions(data?.data);
+        setSuggestions(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -268,23 +268,53 @@ export default function SearchFilterBar() {
           <div className="srp-search-suggestions">
             {loading ? (
               <p>Loading...</p>
-            ) : suggestions.location?.length > 0 ? (
-              <div className="srp-suggestion-group">
-                <div className="srp-suggestion-title">suburb</div>
-                <ul className="srp-suggestion-list">
-                  {suggestions.location.map((item: any, i: number) => (
-                    <li
-                      key={i}
-                      className="srp-suggestion-link"
-                      onClick={() => {}}
-                    >
-                      {item.suburb}
-                    </li>
-                  ))}
-                </ul>
-              </div>
             ) : (
-              <p>No results found for '{search}'</p>
+              <>
+                {suggestions.region_state?.length > 0 && (
+                  <div className="srp-suggestion-group">
+                    <div className="srp-suggestion-title">Regions</div>
+                    <ul className="srp-suggestion-list">
+                      {suggestions.region_state.map((item: any, i: number) => (
+                        <li
+                          key={i}
+                          className="srp-suggestion-link"
+                          onClick={() => {
+                            router.push(`/${item.uri}`);
+                            setSuggestions(null);
+                          }}
+                        >
+                          {item.address}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {suggestions.pincode_location_region_state?.length > 0 && (
+                  <div className="srp-suggestion-group">
+                    <div className="srp-suggestion-title">Suburbs</div>
+                    <ul className="srp-suggestion-list">
+                      {suggestions.pincode_location_region_state.map(
+                        (item: any, i: number) => (
+                          <li
+                            key={i}
+                            className="srp-suggestion-link"
+                            onClick={() => {
+                              router.push(`/${item.uri}`);
+                              setSuggestions(null);
+                            }}
+                          >
+                            {item.address}
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
+                )}
+                {!suggestions.region_state?.length &&
+                  !suggestions.pincode_location_region_state?.length && (
+                    <p>No results found for '{search}'</p>
+                  )}
+              </>
             )}
           </div>
         </div>
