@@ -56,12 +56,16 @@ export const SORT_OPTIONS = [
 ];
 
 export const STATE_NAMES = [
-  { code: "nsw", name: "New South Wales" },
-  { code: "qld", name: "Queensland" },
-  { code: "wa", name: "Western Australia" },
-  { code: "vic", name: "Victoria" },
-  { code: "sa", name: "South Australia" },
-  { code: "act", name: "Australian Capital Territory" },
-  { code: "tas", name: "Tasmania" },
-  { code: "nt", name: "Northern Territory" },
+  { code: "nsw", name: "New South Wales", slug: "new-south-wales" },
+  { code: "qld", name: "Queensland", slug: "queensland" },
+  { code: "wa", name: "Western Australia", slug: "western-australia" },
+  { code: "vic", name: "Victoria", slug: "victoria" },
+  { code: "sa", name: "South Australia", slug: "south-australia" },
+  {
+    code: "act",
+    name: "Australian Capital Territory",
+    slug: "australian-capital-territory",
+  },
+  { code: "tas", name: "Tasmania", slug: "tasmania" },
+  { code: "nt", name: "Northern Territory", slug: "northern-territory" },
 ];

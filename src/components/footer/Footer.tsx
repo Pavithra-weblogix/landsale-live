@@ -23,7 +23,7 @@ const Footer = () => {
                       (item) => (
                         <li key={item.code}>
                           <Link
-                            href={`/state/${item.code}`}
+                            href={`/listings/${item.slug}-state`}
                             className="caption-1 text-variant-2"
                           >
                             {item.name}

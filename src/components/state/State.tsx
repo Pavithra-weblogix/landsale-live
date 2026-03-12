@@ -25,6 +25,9 @@ type StateProps = {
   featuredListing: LandListingResponse;
 
   stateCode: string;
+  region?: string;
+  suburb?: string;
+
   clickidQuery?: string;
   filters: {
     type?: string;
@@ -39,6 +42,9 @@ const State = ({
   featuredListing,
 
   stateCode,
+  region,
+  suburb,
+
   filters,
   clickidQuery,
 }: StateProps) => {
@@ -110,7 +116,7 @@ const State = ({
 
     setCurrentPage(page);
     fetchPageData(page);
-  }, [filters, stateCode]);
+  }, [filters, stateCode, region, suburb]);
 
   const fetchPageData = async (page: number) => {
     try {
@@ -119,6 +125,8 @@ const State = ({
       const seed = Number(sessionStorage.getItem("listing_seed"));
       const data = await getListingsWithFilters({
         state: stateCode,
+        ...(region && { region }),
+        ...(suburb && { suburb }),
         ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
         ...(filters?.max_price ? { max_price: filters?.max_price } : {}),
         ...(filters?.type ? { category: filters?.type } : {}),

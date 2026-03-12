@@ -1,6 +1,12 @@
 "use client";
 
-import { LAND_OPTIONS, LISTING_TYPES, PRICE_OPTIONS, SITE_URL } from "@/config";
+import {
+  LAND_OPTIONS,
+  LISTING_TYPES,
+  PRICE_OPTIONS,
+  SITE_URL,
+  STATE_NAMES,
+} from "@/config";
 import { buildUrlFromFilters } from "@/lib/utils/filters/buildUrlFromFilters";
 import { parseFiltersFromUrl } from "@/lib/utils/filters/parseFiltersFromUrl";
 import {
@@ -279,7 +285,19 @@ export default function SearchFilterBar() {
                           key={i}
                           className="srp-suggestion-link"
                           onClick={() => {
-                            router.push(`/${item.uri}`);
+                            const [stateCodeFromUri, regionSlug] =
+                              item.uri.split("/");
+
+                            const stateSlug =
+                              STATE_NAMES.find(
+                                (s) =>
+                                  s.code === stateCodeFromUri.toLowerCase(),
+                              )?.slug || "";
+
+                            router.push(
+                              `/listings/${stateSlug}-state/${regionSlug}`,
+                            );
+
                             setSuggestions(null);
                           }}
                         >
@@ -299,7 +317,16 @@ export default function SearchFilterBar() {
                             key={i}
                             className="srp-suggestion-link"
                             onClick={() => {
-                              router.push(`/${item.uri}`);
+                              const parts = item.uri.split("/");
+
+                              const suburbSlug = parts[0];
+                              const regionSlug = parts[1];
+                              const stateSlug = parts[2];
+
+                              router.push(
+                                `/listings/${stateSlug}/${regionSlug}/${suburbSlug}`,
+                              );
+
                               setSuggestions(null);
                             }}
                           >
