@@ -998,6 +998,9 @@
     transform: translate(-50%, -50%);
     box-shadow: 0 20px 60px #00000040;
     overflow: hidden;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -1023,6 +1026,8 @@
 /* Body */
 .modalBody {
   padding: 14px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .filterGroup {

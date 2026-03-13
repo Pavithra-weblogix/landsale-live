@@ -24,6 +24,12 @@ export default function SearchFilterBar() {
   const [suggestions, setSuggestions] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
+  const [state, setState] = useState("");
+  const [draftState, setDraftState] = useState("");
+
+  const [region, setRegion] = useState("");
+  const [draftRegion, setDraftRegion] = useState("");
+
   const [priceMin, setPriceMin] = useState("");
   const [draftPriceMin, setDraftPriceMin] = useState("");
 
@@ -58,6 +64,18 @@ export default function SearchFilterBar() {
     return Number(v) >= Number(draftPriceMin);
   });
 
+  const filteredLandMinOptions = LAND_OPTIONS.filter((v) => {
+    if (v === "Any") return true;
+    if (!draftLandMax) return true;
+    return Number(v) <= Number(draftLandMax);
+  });
+
+  const filteredLandMaxOptions = LAND_OPTIONS.filter((v) => {
+    if (v === "Any") return true;
+    if (!draftLandMin) return true;
+    return Number(v) >= Number(draftLandMin);
+  });
+
   // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -70,6 +88,8 @@ export default function SearchFilterBar() {
   }, [openFilters]);
   useEffect(() => {
     if (openFilters) {
+      setDraftState(state);
+      setDraftRegion(region);
       setDraftPriceMin(priceMin);
       setDraftPriceMax(priceMax);
       setDraftLandMin(landMin);
@@ -109,6 +129,8 @@ export default function SearchFilterBar() {
 
     setPriceMin(filters.min_price?.toString() || "");
     setPriceMax(filters.max_price?.toString() || "");
+    setLandMin(filters.min_land_size?.toString() || "");
+    setLandMax(filters.max_land_size?.toString() || "");
   }, [params]);
 
   useEffect(() => {
@@ -120,15 +142,9 @@ export default function SearchFilterBar() {
     setListingType(isValidType ? typeFromQuery : "");
   }, [searchParams]);
 
-  useEffect(() => {
-    if (!priceMin || !priceMax) return;
-    if (Number(priceMin) > Number(priceMax)) {
-      setPriceMin("");
-      setPriceMax("");
-    }
-  }, [priceMin, priceMax]);
-
   const clearFilters = () => {
+    setDraftState("");
+    setDraftRegion("");
     setDraftPriceMin("");
     setDraftPriceMax("");
     setDraftLandMin("");
@@ -139,6 +155,7 @@ export default function SearchFilterBar() {
   const activeFilterCount = [
     priceMin || priceMax ? 1 : 0,
     listingType ? 1 : 0,
+    landMin || landMax ? 1 : 0,
   ].reduce((totalCount, currentItem) => totalCount + currentItem, 0);
 
   const applyFilters = () => {
@@ -148,30 +165,17 @@ export default function SearchFilterBar() {
     const landMaxVal = draftLandMax;
     const listingTypeVal = draftListingType;
 
-    setPriceMin(priceMinVal);
-    setPriceMax(priceMaxVal);
-    setLandMin(landMinVal);
-    setLandMax(landMaxVal);
-    setListingType(listingTypeVal);
-
-    if (
-      priceMinVal &&
-      priceMaxVal &&
-      Number(priceMinVal) > Number(priceMaxVal)
-    ) {
-      // Min price cannot be greater than Max price
-      return;
-    }
-
     const filters = {
       min_price: priceMinVal ? Number(priceMinVal) : undefined,
       max_price: priceMaxVal ? Number(priceMaxVal) : undefined,
+      min_land_size: landMinVal ? Number(landMinVal) : undefined,
+      max_land_size: landMaxVal ? Number(landMaxVal) : undefined,
     };
     const segment = buildUrlFromFilters(filters);
 
     const cleanPath = pathname
       .split("/")
-      .filter((part) => !/^(over-|under-|between-)/.test(part))
+      .filter((part) => !/^(over-|under-|between-).*?(m2)?$/.test(part))
       .join("/");
 
     const query = new URLSearchParams(window.location.search);
@@ -322,9 +326,15 @@ export default function SearchFilterBar() {
                               const suburbSlug = parts[0];
                               const regionSlug = parts[1];
                               const stateSlug = parts[2];
+                              const postcode = parts[3];
+
+                              const suburbWithPostcode = suburbSlug.replace(
+                                "-suburb",
+                                `-${postcode}-suburb`,
+                              );
 
                               router.push(
-                                `/listings/${stateSlug}/${regionSlug}/${suburbSlug}`,
+                                `/listings/${stateSlug}/${regionSlug}/${suburbWithPostcode}`,
                               );
 
                               setSuggestions(null);
@@ -361,6 +371,30 @@ export default function SearchFilterBar() {
           </div>
 
           <div className="modalBody">
+            {/* Location */}
+            <div className="filterGroup">
+              <div className="filterTitle">Location</div>
+              <div className="filterGrid">
+                <div>
+                  <label>State</label>
+                  <select
+                    className="form-select"
+                    value={draftState}
+                    onChange={(e) => setDraftState(e.target.value)}
+                  ></select>
+                </div>
+                <div>
+                  <label>Region</label>
+                  <select
+                    className="form-select"
+                    value={draftRegion}
+                    onChange={(e) => setDraftRegion(e.target.value)}
+                  ></select>
+                </div>
+              </div>
+            </div>
+
+            <hr></hr>
             {/* Price */}
             <div className="filterGroup">
               <div className="filterTitle">Price</div>
@@ -409,7 +443,7 @@ export default function SearchFilterBar() {
                     value={draftLandMin}
                     onChange={(e) => setDraftLandMin(e.target.value)}
                   >
-                    {LAND_OPTIONS.map((v) => (
+                    {filteredLandMinOptions.map((v) => (
                       <option key={v} value={v === "Any" ? "" : v}>
                         {v === "Any" ? "Any" : `${v} m²`}
                       </option>
@@ -423,7 +457,7 @@ export default function SearchFilterBar() {
                     value={draftLandMax}
                     onChange={(e) => setDraftLandMax(e.target.value)}
                   >
-                    {LAND_OPTIONS.map((v) => (
+                    {filteredLandMaxOptions.map((v) => (
                       <option key={v} value={v === "Any" ? "" : v}>
                         {v === "Any" ? "Any" : `${v} m²`}
                       </option>

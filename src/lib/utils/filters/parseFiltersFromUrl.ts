@@ -1,45 +1,78 @@
-import { PRICE_OPTIONS } from "@/config";
+import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
 
 export interface LandFilters {
   min_price?: number;
   max_price?: number;
+  min_land_size?: number;
+  max_land_size?: number;
 }
 
 export function parseFiltersFromUrl(slugParts: string[]): LandFilters {
   const filters: LandFilters = {};
 
-  const priceParts = slugParts
-    .map((raw) => decodeURIComponent(raw).split("?")[0])
-    .filter((part) => /^(over-|under-|between-)/.test(part));
+  const parts = slugParts.map((raw) => decodeURIComponent(raw).split("?")[0]);
 
-  if (priceParts.length === 0) return filters;
-  const part = priceParts[0];
+  const priceParts = parts.filter(
+    (part) => /^(over-|under-|between-)/.test(part) && !part.includes("m2"),
+  );
+
+  const landSizeParts = parts.filter(
+    (part) => /^(over-|under-|between-)/.test(part) && part.includes("m2"),
+  );
+
   const isValidPrice = (val: number) => PRICE_OPTIONS.includes(val.toString());
+  const isValidLandSize = (val: number) =>
+    LAND_OPTIONS.includes(val.toString());
 
-  // over-300000
-  let match = part.match(/^over-(\d+)$/);
-  if (match) {
-    const value = Number(match[1]);
-    if (isValidPrice(value)) filters.min_price = value;
-    return filters;
+  if (priceParts.length > 0) {
+    const part = priceParts[0];
+
+    let match = part.match(/^over-(\d+)$/);
+    if (match) {
+      const value = Number(match[1]);
+      if (isValidPrice(value)) filters.min_price = value;
+    }
+
+    match = part.match(/^under-(\d+)$/);
+    if (match) {
+      const value = Number(match[1]);
+      if (isValidPrice(value)) filters.max_price = value;
+    }
+
+    match = part.match(/^between-(\d+)-(\d+)$/);
+    if (match) {
+      const min = Number(match[1]);
+      const max = Number(match[2]);
+      if (isValidPrice(min) && isValidPrice(max) && min <= max) {
+        filters.min_price = min;
+        filters.max_price = max;
+      }
+    }
   }
 
-  // under-800000
-  match = part.match(/^under-(\d+)$/);
-  if (match) {
-    const value = Number(match[1]);
-    if (isValidPrice(value)) filters.max_price = value;
-    return filters;
-  }
+  if (landSizeParts.length > 0) {
+    const part = landSizeParts[0];
 
-  // between-300000-800000
-  match = part.match(/^between-(\d+)-(\d+)$/);
-  if (match) {
-    const min = Number(match[1]);
-    const max = Number(match[2]);
-    if (isValidPrice(min) && isValidPrice(max) && min <= max) {
-      filters.min_price = min;
-      filters.max_price = max;
+    let match = part.match(/^over-(\d+)m2$/);
+    if (match) {
+      const value = Number(match[1]);
+      if (isValidLandSize(value)) filters.min_land_size = value;
+    }
+
+    match = part.match(/^under-(\d+)m2$/);
+    if (match) {
+      const value = Number(match[1]);
+      if (isValidLandSize(value)) filters.max_land_size = value;
+    }
+
+    match = part.match(/^between-(\d+)m2-(\d+)m2$/);
+    if (match) {
+      const min = Number(match[1]);
+      const max = Number(match[2]);
+      if (isValidLandSize(min) && isValidLandSize(max) && min <= max) {
+        filters.min_land_size = min;
+        filters.max_land_size = max;
+      }
     }
   }
 
