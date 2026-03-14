@@ -38,7 +38,8 @@ export default async function ListingsPage({
   const stateCodeFromSlug =
     STATE_NAMES.find((s) => s.slug === stateSlug)?.code ?? "";
 
-  const { min_price, max_price } = parseFiltersFromUrl(slug);
+  const { min_price, max_price, min_land_size, max_land_size } =
+    parseFiltersFromUrl(slug);
 
   const exclusiveListing = await getListing({
     exclusive: "yes",
@@ -58,7 +59,14 @@ export default async function ListingsPage({
       stateCode={stateCodeFromSlug ?? ""}
       region={region}
       suburb={suburb}
-      filters={{ min_price, max_price, type, sortBy }}
+      filters={{
+        min_price,
+        max_price,
+        min_land_size,
+        max_land_size,
+        type,
+        sortBy,
+      }}
       clickidQuery={clickid}
     />
   );

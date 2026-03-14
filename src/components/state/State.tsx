@@ -34,6 +34,8 @@ type StateProps = {
     sortBy?: string;
     min_price?: number;
     max_price?: number;
+    min_land_size?: number;
+    max_land_size?: number;
   };
 };
 
@@ -129,6 +131,12 @@ const State = ({
         ...(suburb && { suburb }),
         ...(filters?.min_price ? { min_price: filters?.min_price } : {}),
         ...(filters?.max_price ? { max_price: filters?.max_price } : {}),
+        ...(filters?.min_land_size
+          ? { min_land_size: filters?.min_land_size }
+          : {}),
+        ...(filters?.max_land_size
+          ? { max_land_size: filters?.max_land_size }
+          : {}),
         ...(filters?.type ? { category: filters?.type } : {}),
         ...(filters?.sortBy ? { order: filters?.sortBy } : { seed }),
         page: page,

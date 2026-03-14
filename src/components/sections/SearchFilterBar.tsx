@@ -26,9 +26,15 @@ export default function SearchFilterBar() {
 
   const [state, setState] = useState("");
   const [draftState, setDraftState] = useState("");
+  const [stateOptions, setStateOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const [region, setRegion] = useState("");
   const [draftRegion, setDraftRegion] = useState("");
+  const [regionOptions, setRegionOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const [priceMin, setPriceMin] = useState("");
   const [draftPriceMin, setDraftPriceMin] = useState("");
@@ -55,25 +61,25 @@ export default function SearchFilterBar() {
   const filteredMinOptions = PRICE_OPTIONS.filter((v) => {
     if (v === "Any") return true;
     if (!draftPriceMax) return true;
-    return Number(v) <= Number(draftPriceMax);
+    return Number(v) < Number(draftPriceMax);
   });
 
   const filteredMaxOptions = PRICE_OPTIONS.filter((v) => {
     if (v === "Any") return true;
     if (!draftPriceMin) return true;
-    return Number(v) >= Number(draftPriceMin);
+    return Number(v) > Number(draftPriceMin);
   });
 
   const filteredLandMinOptions = LAND_OPTIONS.filter((v) => {
     if (v === "Any") return true;
     if (!draftLandMax) return true;
-    return Number(v) <= Number(draftLandMax);
+    return Number(v) < Number(draftLandMax);
   });
 
   const filteredLandMaxOptions = LAND_OPTIONS.filter((v) => {
     if (v === "Any") return true;
     if (!draftLandMin) return true;
-    return Number(v) >= Number(draftLandMin);
+    return Number(v) > Number(draftLandMin);
   });
 
   // Close on outside click
@@ -222,6 +228,46 @@ export default function SearchFilterBar() {
     const timer = setTimeout(() => fetchSuggestions(), 300);
     return () => clearTimeout(timer);
   }, [search]);
+
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const res = await fetch("/api/lfs/filter-options?field=state");
+        const json = await res.json();
+
+        if (json?.success) {
+          setStateOptions(json.data?.state || []);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchStates();
+  }, []);
+
+  useEffect(() => {
+    if (!draftState) {
+      setRegionOptions([]);
+      return;
+    }
+
+    const fetchRegions = async () => {
+      try {
+        const res = await fetch(
+          `/api/lfs/filter-options?field=regions&state=${encodeURIComponent(draftState)}`,
+        );
+        const json = await res.json();
+        if (json?.success) {
+          setRegionOptions(json.data?.regions || []);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchRegions();
+  }, [draftState]);
 
   return (
     <>
@@ -380,17 +426,34 @@ export default function SearchFilterBar() {
                   <select
                     className="form-select"
                     value={draftState}
-                    onChange={(e) => setDraftState(e.target.value)}
-                  ></select>
+                    onChange={(e) => {
+                      setDraftState(e.target.value);
+                      setDraftRegion("");
+                    }}
+                  >
+                    {stateOptions.map((state) => (
+                      <option key={state.value} value={state.value}>
+                        {state.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <div>
-                  <label>Region</label>
-                  <select
-                    className="form-select"
-                    value={draftRegion}
-                    onChange={(e) => setDraftRegion(e.target.value)}
-                  ></select>
-                </div>
+                {draftState && (
+                  <div>
+                    <label>Region</label>
+                    <select
+                      className="form-select"
+                      value={draftRegion}
+                      onChange={(e) => setDraftRegion(e.target.value)}
+                    >
+                      {regionOptions.map((region) => (
+                        <option key={region.value} value={region.value}>
+                          {region.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -43,7 +43,7 @@ export function parseFiltersFromUrl(slugParts: string[]): LandFilters {
     if (match) {
       const min = Number(match[1]);
       const max = Number(match[2]);
-      if (isValidPrice(min) && isValidPrice(max) && min <= max) {
+      if (isValidPrice(min) && isValidPrice(max) && min < max) {
         filters.min_price = min;
         filters.max_price = max;
       }
@@ -69,7 +69,7 @@ export function parseFiltersFromUrl(slugParts: string[]): LandFilters {
     if (match) {
       const min = Number(match[1]);
       const max = Number(match[2]);
-      if (isValidLandSize(min) && isValidLandSize(max) && min <= max) {
+      if (isValidLandSize(min) && isValidLandSize(max) && min < max) {
         filters.min_land_size = min;
         filters.max_land_size = max;
       }
