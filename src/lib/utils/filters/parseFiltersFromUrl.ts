@@ -1,6 +1,8 @@
 import { LAND_OPTIONS, PRICE_OPTIONS } from "@/config";
 
 export interface LandFilters {
+  state?: string;
+  region?: string;
   min_price?: number;
   max_price?: number;
   min_land_size?: number;
@@ -11,6 +13,16 @@ export function parseFiltersFromUrl(slugParts: string[]): LandFilters {
   const filters: LandFilters = {};
 
   const parts = slugParts.map((raw) => decodeURIComponent(raw).split("?")[0]);
+
+  const statePart = parts.find((part) => part.endsWith("-state"));
+  if (statePart) {
+    filters.state = statePart.replace("-state", "");
+  }
+
+  const regionPart = parts.find((part) => part.endsWith("-region"));
+  if (regionPart) {
+    filters.region = regionPart.replace("-region", "");
+  }
 
   const priceParts = parts.filter(
     (part) => /^(over-|under-|between-)/.test(part) && !part.includes("m2"),

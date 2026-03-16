@@ -3,11 +3,24 @@ import { LandFilters } from "./parseFiltersFromUrl";
 export function buildUrlFromFilters(filters: LandFilters): string {
   const segments: string[] = [];
 
+  const state = filters.state;
+  const region = filters.region;
+
   const minPrice = filters.min_price;
   const maxPrice = filters.max_price;
 
   const minLand = filters.min_land_size;
   const maxLand = filters.max_land_size;
+
+  // State
+  if (state) {
+    segments.push(`${state}-state`);
+  }
+
+  // Region
+  if (region) {
+    segments.push(`${region}-region`);
+  }
 
   // Price
   if (minPrice && maxPrice) {

@@ -133,6 +133,8 @@ export default function SearchFilterBar() {
 
     const filters = parseFiltersFromUrl(slugArray);
 
+    setState(filters.state || "");
+    setRegion(filters.region || "");
     setPriceMin(filters.min_price?.toString() || "");
     setPriceMax(filters.max_price?.toString() || "");
     setLandMin(filters.min_land_size?.toString() || "");
@@ -159,35 +161,38 @@ export default function SearchFilterBar() {
   };
 
   const activeFilterCount = [
+    state || region ? 1 : 0,
     priceMin || priceMax ? 1 : 0,
     listingType ? 1 : 0,
     landMin || landMax ? 1 : 0,
   ].reduce((totalCount, currentItem) => totalCount + currentItem, 0);
 
   const applyFilters = () => {
-    const priceMinVal = draftPriceMin;
-    const priceMaxVal = draftPriceMax;
-    const landMinVal = draftLandMin;
-    const landMaxVal = draftLandMax;
-    const listingTypeVal = draftListingType;
-
     const filters = {
-      min_price: priceMinVal ? Number(priceMinVal) : undefined,
-      max_price: priceMaxVal ? Number(priceMaxVal) : undefined,
-      min_land_size: landMinVal ? Number(landMinVal) : undefined,
-      max_land_size: landMaxVal ? Number(landMaxVal) : undefined,
+      state: draftState || undefined,
+      region: draftRegion || undefined,
+      min_price: draftPriceMin ? Number(draftPriceMin) : undefined,
+      max_price: draftPriceMax ? Number(draftPriceMax) : undefined,
+      min_land_size: draftLandMin ? Number(draftLandMin) : undefined,
+      max_land_size: draftLandMax ? Number(draftLandMax) : undefined,
     };
     const segment = buildUrlFromFilters(filters);
 
     const cleanPath = pathname
       .split("/")
-      .filter((part) => !/^(over-|under-|between-).*?(m2)?$/.test(part))
+      .filter(
+        (part) =>
+          !/^(over-|under-|between-).*?(m2)?$/.test(part) &&
+          !/-state$/.test(part) &&
+          !/-region$/.test(part) &&
+          !/-suburb$/.test(part),
+      )
       .join("/");
 
     const query = new URLSearchParams(window.location.search);
 
-    if (listingTypeVal) {
-      query.set("type", listingTypeVal);
+    if (draftListingType) {
+      query.set("type", draftListingType);
     } else {
       query.delete("type");
     }
@@ -446,8 +451,11 @@ export default function SearchFilterBar() {
                       value={draftRegion}
                       onChange={(e) => setDraftRegion(e.target.value)}
                     >
-                      {regionOptions.map((region) => (
-                        <option key={region.value} value={region.value}>
+                      {regionOptions.map((region, i) => (
+                        <option
+                          key={`${region.value}-${i}`}
+                          value={region.value}
+                        >
                           {region.label}
                         </option>
                       ))}

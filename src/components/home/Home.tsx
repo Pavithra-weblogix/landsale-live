@@ -196,11 +196,15 @@ export const Home = ({
 
           <div className="state-grid">
             {stateCount?.data?.map((item) => (
-              <div key={item?.state} className="state-card">
+              <Link
+                key={item?.state}
+                className="state-card"
+                href={`/listings/${item.slug}-state`}
+              >
                 {item?.state}
                 <br />
                 <span>{item?.count}</span>
-              </div>
+              </Link>
             ))}
           </div>
 
