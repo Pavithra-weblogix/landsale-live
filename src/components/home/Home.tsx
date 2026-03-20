@@ -92,7 +92,10 @@ export const Home = ({
           <div className="row justify-content-center">
             <div className="col-lg-8">
               <div className="slider-content">
-                <div className="search-bar">
+                <div className="heading">
+                <h1>Land for Sale in Australia</h1>
+                </div>
+                {/* <div className="search-bar">
                   <div className="tabs">
                     <button>
                       <i className="icon icon-buy-home1"></i> Buy Land
@@ -172,7 +175,7 @@ export const Home = ({
                       )}
                     </div>
                   </div>
-                )}
+                )} */}
 
                 <div className="banner_keyword hidden-xs">
                   <ul>

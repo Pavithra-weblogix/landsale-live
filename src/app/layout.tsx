@@ -33,6 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <link href="https://api.fontshare.com/v2/css?f[]=beVietnam-pro@200,300,400,500,600,700&f[]=zodiak@300,400,700,800&display=swap" rel="stylesheet"/>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased body`}
       >
