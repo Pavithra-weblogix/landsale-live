@@ -93,7 +93,7 @@ export const Home = ({
             <div className="col-lg-8">
               <div className="slider-content">
                 <div className="heading">
-                <h1>Land for Sale in Australia</h1>
+                  <h1>Land for Sale in Australia</h1>
                 </div>
                 {/* <div className="search-bar">
                   <div className="tabs">
@@ -202,7 +202,7 @@ export const Home = ({
               <Link
                 key={item?.state}
                 className="state-card"
-                href={`/listings/${item.slug}-state`}
+                href={`/${item.slug}`}
               >
                 {item?.state}
                 <br />

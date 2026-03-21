@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   LocSearch: "/loc-search",
   LocationFormat: "/location-format",
   FilterOptions: "/filter-options",
+  EstateList: "/estate_list",
 };
 
 export const PRICE_OPTIONS = [

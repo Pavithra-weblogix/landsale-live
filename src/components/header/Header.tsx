@@ -107,7 +107,7 @@ const Header = () => {
                               <ul>
                                 {STATE_NAMES.map((item) => (
                                   <li key={item.code}>
-                                    <Link href={`/listings/${item.slug}-state`}>
+                                    <Link href={`/${item.slug}`}>
                                       {item.name}
                                     </Link>
                                   </li>
@@ -171,9 +171,7 @@ const Header = () => {
                       <ul>
                         {STATE_NAMES.map((item) => (
                           <li key={item.code}>
-                            <Link href={`/listings/${item.slug}-state`}>
-                              {item.name}
-                            </Link>
+                            <Link href={`/${item.slug}`}>{item.name}</Link>
                           </li>
                         ))}
                       </ul>
