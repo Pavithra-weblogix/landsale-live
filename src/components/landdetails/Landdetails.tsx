@@ -136,7 +136,7 @@ const ListingDetail = () => {
             </div>
 
             {/* LOCATION LINKS */}
-            <div className="location-box">
+            {/* <div className="location-box">
               <div className="footer-quick-links">
                 <h2 className="footer-title">Location</h2>
 
@@ -158,7 +158,7 @@ const ListingDetail = () => {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
 
           </div>
 

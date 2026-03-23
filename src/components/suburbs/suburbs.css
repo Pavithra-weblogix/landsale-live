@@ -189,6 +189,11 @@
   font-size: 12px;
 }
 
+.flat-categories-1 .col-lg-3, .browse-region-section .col-lg-3, .flat-categories-1 .col-lg-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 .slider_new .info_content .price .btn-primary i {
   font-size: 10px;
   margin-left: 10px;

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Thumbs } from "swiper/modules";
+import EnquiryModal from "@/components/estate/EnquiryModal";
 
 import "./estate.css";
 
@@ -12,8 +13,15 @@ const Estate = () => {
 
     const heroImages = ["land1.jpg", "land2.jpg", "land3.jpg", "land4.jpg"];
 
+    const [open, setOpen] = useState(false);
+
     return (
         <>
+            <EnquiryModal
+                                    isOpen={open}
+                                    onClose={() => setOpen(false)}
+                                    title="Everdene"
+                                />
             {/* HERO SECTION */}
             <section className="hero">
                 <div className="topinfo_land_one">
@@ -34,7 +42,7 @@ const Estate = () => {
                             </h2>
 
                             <div className="hero-buttons">
-                                <a href="#" className="btn-primary">
+                                <a href="javascript:void(0)" className="btn-primary" onClick={() => setOpen(true)}>
                                     Enquire Now
                                 </a>
                             </div>
@@ -98,9 +106,7 @@ const Estate = () => {
                                     <li>Close to schools, shopping & transport links</li>
                                 </ul>
 
-                                <a href="#" className="btn-outline full">
-                                    Download Estate Brochure
-                                </a>
+
                             </div>
 
                             {/* LOCATION */}
@@ -154,9 +160,12 @@ const Estate = () => {
                                     <strong>2024</strong>
                                 </div>
 
-                                <a href="#" className="btn primary full mt-3">
-                                    View All Estate Listings
-                                </a>
+                                
+                                <button className="enquire-btn btn primary full mt-3" onClick={() => setOpen(true)}>
+                                    Enquire Now
+                                </button>
+
+                                
                             </aside>
                         </div>
 
@@ -164,69 +173,167 @@ const Estate = () => {
                 </div>
             </section>
 
-            {/* RELATED ESTATES */}
-            <section className="land_list section">
+            {/* All Land Listings */}
+            <section className="flat-section slider_new flat-categories-1 arrow_shadow bg_color_1">
                 <div className="container">
-                    <h3>Everdene Estate Information</h3>
-
-                    <p className="section-subtext">
-                        Looking for more land options in the area? Browse these nearby
-                        estates in Western Sydney.
-                    </p>
-
-                    <div className="card-grid">
-                        {[
-                            {
-                                title: "Lake Narracan Estate",
-                                location: "Moe, VIC",
-                                price: "From $599,900",
-                                size: "512 sqm",
-                                img: "2530-huntley-illawarra-new-south-wales.jpg",
-                            },
-                            {
-                                title: "Evergreen Park",
-                                location: "Logan, QLD",
-                                price: "From $649,900",
-                                size: "632 sqm",
-                                img: "2525-figtree-illawarra-new-south-wales.jpg",
-                            },
-                            {
-                                title: "Golden Grove Estate",
-                                location: "Wattle Grove, WA",
-                                price: "From $866,900",
-                                size: "767 sqm",
-                                img: "2620-sutton-capital-new-south-wales.jpg",
-                            },
-                            {
-                                title: "Alkina",
-                                location: "Mickleham, VIC",
-                                price: "From $720,000",
-                                size: "688 sqm",
-                                img: "2620-tralee-capital-new-south-wales.jpg",
-                            },
-                        ].map((item, i) => (
-                            <article className="land-card" key={i}>
-                                <div className="image_card">
-                                    <img
-                                        src={`/images/${item.img}`}
-                                        alt={item.title}
-                                    />
-                                </div>
-                                <div className="info_content">
-                                    <h3>{item.title}</h3>
-                                    <p className="location">
-                                        <i className="icon icon-mapPin"></i> {item.location}
-                                    </p>
-                                    <div className="footer_data">
-                                        <p className="price">{item.price}</p>
-                                        <span className="sqft_data">
-                                            <i className="icon icon-sqft"></i> {item.size}
-                                        </span>
-                                        <i className="icon icon-arr-r"></i>
+                    <div className="box-title style-1 wow fadeInUp">
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <div className="row">
+                                    <div className="col-lg-12">
+                                        <h3 className="title text-start">
+                                            11 Blocks of Land For Sale in Everdene Estate
+                                        </h3>
                                     </div>
+
+                                    {/* Card 1 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3340-darley-moorabool-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 15 Gordon Street</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5520
+                                                    </p>
+                                                    <div className="price">
+                                                        <span className="price_data">$925,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    {/* Card 2 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3630-shepparton-goulburn-valley-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 9 Melbourne Avenue</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5550
+                                                    </p>
+                                                    <div className="price">
+                                                        <span className="price_data">$870,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    {/* Card 1 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3340-darley-moorabool-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 11 Gordon Street</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5520
+                                                    </p>
+
+                                                    <div className="price">
+                                                        <span className="price_data">$880,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    {/* Card 2 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3630-shepparton-goulburn-valley-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 53 Bland Street</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5550
+                                                    </p>
+
+                                                    <div className="price">
+                                                        <span className="price_data">$845,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    {/* Card 1 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3340-darley-moorabool-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 40 Arthur Street</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5520
+                                                    </p>
+
+                                                    <div className="price">
+                                                        <span className="price_data">$799,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+                                    {/* Card 2 */}
+                                    <div className="col-lg-3">
+                                        <a href="#" className="homelengo-categories">
+                                            <div className="listing-card">
+                                                <div className="image_card">
+                                                    <img src="https://www.landsales.com.au/wp-content/uploads/2025/11/3630-shepparton-goulburn-valley-victoria.jpg" alt="" />
+                                                </div>
+                                                <div className="info_content">
+                                                    <h4>Lot 40 Elizabeth Street</h4>
+                                                    <p className="location">
+                                                        <i className="icon icon-mapPin"></i> Ashfield 5550
+                                                    </p>
+                                                    <div className="price">
+                                                        <span className="price_data">$799,000</span>
+                                                        <button className="btn-primary">
+                                                            View Details <i className="icon icon-arr-r"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+
+
                                 </div>
-                            </article>
-                        ))}
+
+
+                            </div>
+
+
+                        </div>
                     </div>
                 </div>
             </section>
