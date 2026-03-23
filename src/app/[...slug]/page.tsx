@@ -28,11 +28,25 @@ export default async function Page({ params }: { params: Params }) {
 
     const featuredEstates = await res.json();
 
+    const regionsRes = await fetch(
+      `${SITE_URL}/api/lfs/state-based-region?state=${state}`,
+    );
+
+    const regionsData = await regionsRes.json();
+
+    const landRes = await fetch(
+      `${SITE_URL}/api/lfs/land-list?state=${state}&limit=6&category=land`,
+    );
+
+    const landList = await landRes.json();
+
     return (
       <Bystate
         // state={state}
         stateCode={stateCodeFromSlug ?? ""}
         featuredEstates={featuredEstates}
+        regions={regionsData}
+        landList={landList}
       />
     );
   }
