@@ -1,19 +1,7 @@
-.header-fixed.fixed-header {
-  position: relative;
-  background: #1c4d57;
-  padding-top: 2px;
-}
-.main-header.fixed-header.is-fixed {
-  background: #fff;
-  border-bottom: 1px solid #e4e4e4;
-  padding-top: 3px;
-  padding-bottom: 0;
-  position: fixed;
-  box-shadow: 0 0 18px #0000000a;
-}
+
 .section {
   padding: 40px 0px;
-  background: #fff;
+  background: #f7f4f4;
 }
 /* TOP GRID */
 .top-grid {
@@ -42,7 +30,7 @@
 
 /* ENQUIRY BOX */
 .enquiry-box {
-  background: #f1f7f3;
+  background: #ffffff;
   padding: 25px;
   border-radius: 12px;
   position: sticky;
@@ -133,7 +121,7 @@
 
 /* CONTENT */
 .content-box {
-  background: #fff;
+  
   padding: 15px 0px;
   border-radius: 0;
   margin-bottom: 25px;
@@ -141,19 +129,18 @@
   border-bottom: 1px solid #ddd;
 }
 
-.location-location h3,
-.content-box h2 {
-  font-size: 25px;
-  line-height: 30px;
-  margin-bottom: 12px;
-  font-family: "Marcellus", serif;
-  font-weight: normal;
+.location-location h3, .content-box h2 {
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 30px;
 }
 
 .content-box p {
-  font-size: 15px;
-  line-height: 24px;
-  margin-bottom: 12px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
 }
 
 .content-box ul {
@@ -161,9 +148,10 @@
 }
 
 .content-box li {
-  margin-bottom: 8px;
-  list-style: disc;
-  font-size: 15px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    list-style: outside;
+    font-weight: 300;
 }
 
 /* LOT SECTION */
@@ -207,8 +195,11 @@
 }
 
 .estate-box p img {
-  position: relative;
-  top: 1px;
+    position: relative;
+    top: 1px;
+    width: 20px;
+    height: 17px;
+    object-fit: contain;
 }
 
 .btn-outline {
@@ -355,6 +346,12 @@
   transform: translateY(-50%);
   font-size: 14px;
   color: #3f6f62;
+}
+
+.location-location h6 {
+  font-family: Be Vietnam Pro, sans-serif;
+      font-size: 16px;
+    font-weight: 500;
 }
 
 /* RESPONSIVE */

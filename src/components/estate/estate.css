@@ -1,16 +1,4 @@
-.header-fixed.fixed-header {
-  position: relative;
-  background: #1c4d57;
-  padding-top: 2px;
-}
-.main-header.fixed-header.is-fixed {
-  background: #fff;
-  border-bottom: 1px solid #e4e4e4;
-  padding-top: 3px;
-  padding-bottom: 0;
-  position: fixed;
-  box-shadow: 0 0 18px #0000000a;
-}
+
 .section {
   padding: 40px 0px;
 }
@@ -156,14 +144,11 @@
   border-bottom: 1px solid #ddd;
 }
 
-.location-location h3,
-.content-box h2,
-.land_list h3 {
-  font-size: 25px;
-  line-height: 30px;
-  margin-bottom: 12px;
-  font-family: "Marcellus", serif;
-  font-weight: normal;
+.location-location h3, .content-box h2, .land_list h3 {
+    margin-bottom: 12px;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 30px;
 }
 
 .location-location p {
@@ -188,9 +173,10 @@
 }
 
 .content-box p {
-  font-size: 15px;
-  line-height: 24px;
-  margin-bottom: 12px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
 }
 
 .content-box ul {
@@ -198,9 +184,10 @@
 }
 
 .content-box li {
-  margin-bottom: 8px;
-  list-style: disc;
-  font-size: 15px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    list-style: outside;
+    font-weight: 300;
 }
 
 /* LOT SECTION */
@@ -335,7 +322,7 @@
 
 .footer-quick-links h2 {
   font-size: 30px;
-  font-family: "Marcellus", serif;
+  
   font-weight: normal;
 }
 
@@ -347,6 +334,110 @@
 .estate_update a {
   width: 100%;
 }
+
+.flat-section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.homelengo-categories {
+    -o-transition: all .4s ease;
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 16px;
+    flex-direction: column;
+    align-items: center;
+    gap: 27px;
+    padding: 30px 24px 24px;
+    transition: all .4s;
+    display: flex;
+    position: relative;
+}
+
+.homelengo-categories.active, .homelengo-categories:hover {
+    border-color: #0000;
+    box-shadow: 0 30px 40px #0000001a;
+}
+
+.slider_new .homelengo-categories {
+    border: none;
+    margin-bottom: 20px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.slider_new .image_card {
+    min-height: 200px;
+    max-height: 200px;
+    overflow: hidden;
+}
+
+.slider_new .image_card img {
+    border-radius: 0;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    min-height: 210px;
+    max-height: 210px;
+    margin: 0 auto;
+    display: block;
+}
+
+.slider_new .info_content {
+    text-align: start;
+    padding: 15px;
+}
+
+.slider_new .info_content h4 {
+    letter-spacing: 0;
+    color: #000;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 25px;
+}
+
+.slider_new .info_content p.location {
+    color: #626262;
+    letter-spacing: -.5px;
+    margin-top: 2px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    font-weight: 300;
+    display: block;
+}
+
+.slider_new .info_content .price {
+    border-top: 1px solid #ddd;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 0;
+    padding-top: 10px;
+    display: flex;
+}
+
+.slider_new .info_content .price .price_data {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.slider_new .box-title .title {
+    text-transform: inherit;
+    color: #000;
+    letter-spacing: 0;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: Be Vietnam Pro, sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+.flat-categories-1 .col-lg-3, .browse-region-section .col-lg-3, .flat-categories-1 .col-lg-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 
 .quick-links-grid {
   display: grid;
@@ -373,6 +464,41 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
+.info_content .btn-primary {
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase;
+    background: #2f4f3f;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 15px;
+    font-size: 12px;
+}
+.slider_new .info_content .price small {
+    font-family: Zodiak, serif;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+}
+
+.meta-list {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.meta-list .item {
+    align-items: center;
+    gap: 4px;
+    display: flex;
+}
+.meta-list .item .icon {
+    color: #1c4d57;
+    font-size: 16px;
+}
 .quick-link-card h3 {
   font-size: 17px;
   margin-bottom: 5px;
@@ -545,7 +671,7 @@
 .land-card h3 {
   margin-top: 0px;
   font-size: 20px;
-  font-family: "Marcellus", serif;
+  
   font-weight: normal;
   line-height: 25px;
   margin-bottom: 0;
@@ -598,6 +724,92 @@
   min-height: 215px;
   overflow: hidden;
   position: relative;
+}
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Modal box */
+.modal-box {
+  background: #fff;
+  width: 500px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 8px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Close button */
+.modal-box .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 22px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #000000;
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-box .close-btn:before {
+  font-size: 17px;
+}
+
+/* Title */
+.modal-box h2 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* Form */
+.enquiry-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Button */
+.enquiry-form button {
+  width: 100%;
+  padding: 14px;
+  background: #0f3f2f;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enquire-btn {
+  width: 100%;
 }
 
 /* Overlay */
