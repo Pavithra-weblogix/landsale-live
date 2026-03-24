@@ -3,6 +3,8 @@ import Bystate from "@/components/bystate/Bystate";
 import Byregion from "@/components/byregion/Byregion";
 import Suburbs from "@/components/suburbs/Suburbs";
 import { SITE_URL, STATE_NAMES } from "@/config";
+import EstateListings from "@/components/listings/EstateListings";
+import LandListings from "@/components/listings/LandListings";
 
 type Params = Promise<{
   slug?: string[];
@@ -14,10 +16,57 @@ export default async function Page({ params }: { params: Params }) {
   const parsed = parseSlug(slug ?? []);
 
   const { state, region, suburb, listingType, isSuburbsPage } = parsed;
+
   const stateCodeFromSlug =
     STATE_NAMES.find((s) => s.slug === state)?.code ?? "";
 
-  if (state && !region && !suburb && !listingType && !isSuburbsPage) {
+  if (listingType) {
+    const baseParams: Record<string, string> = {};
+
+    if (state) baseParams.state = state;
+    if (region) baseParams.region = region;
+    if (suburb) baseParams.suburb = suburb;
+
+    if (listingType === "estates") {
+      const query = new URLSearchParams({
+        ...baseParams,
+      }).toString();
+
+      const res = await fetch(`${SITE_URL}/api/lfs/estate-list?${query}`);
+      const estates = await res.json();
+
+      return (
+        <EstateListings
+          data={estates}
+          state={state}
+          region={region}
+          suburb={suburb}
+        />
+      );
+    }
+
+    if (listingType === "land") {
+      const query = new URLSearchParams({
+        ...baseParams,
+        category: "land",
+      }).toString();
+
+      const res = await fetch(`${SITE_URL}/api/lfs/land-list?${query}`);
+      const land = await res.json();
+
+      return (
+        <LandListings
+          stateCode={stateCodeFromSlug ?? ""}
+          data={land}
+          state={state}
+          region={region}
+          suburb={suburb}
+        />
+      );
+    }
+  }
+
+  if (state && !region && !suburb && !isSuburbsPage) {
     const query = new URLSearchParams({
       featured: "yes",
       limit: "8",
@@ -51,7 +100,7 @@ export default async function Page({ params }: { params: Params }) {
     );
   }
 
-  if (state && region && !suburb && !listingType && !isSuburbsPage) {
+  if (state && region && !suburb && !isSuburbsPage) {
     return (
       <Byregion
       // stateCode={stateCodeFromSlug}
@@ -60,7 +109,7 @@ export default async function Page({ params }: { params: Params }) {
     );
   }
 
-  if (state && region && suburb && !listingType && !isSuburbsPage) {
+  if (state && region && suburb && !isSuburbsPage) {
     return (
       <Suburbs
       // stateCode={stateCodeFromSlug}

@@ -45,7 +45,7 @@ export default function LandPage({
                 {featuredEstates?.data?.map((item: any) => (
                   <div className="col-lg-3" key={item.estate_id}>
                     <a
-                      href={`/${item.estate_slug}`}
+                      href={`/estate/${item.estate_slug}`}
                       className="homelengo-categories"
                     >
                       <div className="listing-card">
@@ -78,9 +78,9 @@ export default function LandPage({
 
                 {/* Button */}
                 <div className="col-lg-12">
-                  <button className="all-listing-button">
+                  <Link href="estates" className="all-listing-button">
                     View All Estates <i className="icon icon-arr-r"></i>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function LandPage({
                     {landList.data.map((item: any) => (
                       <div className="col-lg-4" key={item.land_id}>
                         <a
-                          href={`/${item.land_slug}`}
+                          href={`/land/${item.land_slug}`}
                           className="homelengo-categories"
                         >
                           <div className="listing-card">
@@ -170,9 +170,9 @@ export default function LandPage({
 
                     {/* Button */}
                     <div className="col-lg-12">
-                      <button className="all-listing-button">
+                      <Link href="land" className="all-listing-button">
                         View All Land <i className="icon icon-arr-r"></i>
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
