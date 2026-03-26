@@ -12,7 +12,7 @@ import { formatDate } from "@/lib/utils/formatDate";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { SITE_URL } from "@/config";
+import { SITE_URL, STATE_NAMES } from "@/config";
 import ListingSlider from "@/components/sections/ListingSlider";
 
 type SuggestionGroupProps = {
@@ -57,6 +57,13 @@ export const Home = ({
   const [loading, setLoading] = useState(false);
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
+  };
+
+  const getStateSlug = (stateKey: string) => {
+    const match = STATE_NAMES.find(
+      (item) => item.code.toLowerCase() === stateKey.toLowerCase(),
+    );
+    return match?.slug || "";
   };
 
   useEffect(() => {
@@ -202,7 +209,7 @@ export const Home = ({
               <Link
                 key={item?.state}
                 className="state-card"
-                href={`/${item.slug}`}
+                href={`/${getStateSlug(item.state)}`}
               >
                 {item?.state}
                 <br />

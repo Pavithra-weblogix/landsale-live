@@ -28,36 +28,13 @@ export default async function Page({ params }: { params: Params }) {
     if (suburb) baseParams.suburb = suburb;
 
     if (listingType === "estates") {
-      const query = new URLSearchParams({
-        ...baseParams,
-      }).toString();
-
-      const res = await fetch(`${SITE_URL}/api/lfs/estate-list?${query}`);
-      const estates = await res.json();
-
-      return (
-        <EstateListings
-          data={estates}
-          state={state}
-          region={region}
-          suburb={suburb}
-        />
-      );
+      return <EstateListings state={state} region={region} suburb={suburb} />;
     }
 
     if (listingType === "land") {
-      const query = new URLSearchParams({
-        ...baseParams,
-        category: "land",
-      }).toString();
-
-      const res = await fetch(`${SITE_URL}/api/lfs/land-list?${query}`);
-      const land = await res.json();
-
       return (
         <LandListings
           stateCode={stateCodeFromSlug ?? ""}
-          data={land}
           state={state}
           region={region}
           suburb={suburb}
