@@ -44,7 +44,7 @@ export default function LandPage({
                 {/* Card 1 */}
                 {featuredEstates?.data?.map((item: any) => (
                   <div className="col-lg-3" key={item.estate_id}>
-                    <a
+                    <Link
                       href={`/estate/${item.estate_slug}`}
                       className="homelengo-categories"
                     >
@@ -72,7 +72,7 @@ export default function LandPage({
                           </div>
                         </div>
                       </div>
-                    </a>
+                    </Link>
                   </div>
                 ))}
 
@@ -138,7 +138,7 @@ export default function LandPage({
                     {/* Card 1 */}
                     {landList.data.map((item: any) => (
                       <div className="col-lg-4" key={item.land_id}>
-                        <a
+                        <Link
                           href={`/land/${item.land_slug}`}
                           className="homelengo-categories"
                         >
@@ -164,7 +164,7 @@ export default function LandPage({
                               </div>
                             </div>
                           </div>
-                        </a>
+                        </Link>
                       </div>
                     ))}
 

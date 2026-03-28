@@ -7,21 +7,22 @@ import type { Swiper as SwiperType } from "swiper";
 
 import "./landdetails.css";
 
-const ListingDetail = () => {
+type Props = {
+  landDetail: any;
+};
+
+const ListingDetail = ({ landDetail }: Props) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
   return (
     <section className="wrapper-layout listing-wrapper section">
       <div className="container">
         <div className="row">
-
           {/* LEFT CONTENT */}
           <div className="col-lg-8">
             <div className="topinfo_land_one">
-
               {/* GALLERY */}
               <div className="gallery">
-
                 {/* MAIN SLIDER */}
                 <Swiper
                   modules={[Navigation, Thumbs]}
@@ -29,13 +30,20 @@ const ListingDetail = () => {
                   thumbs={{ swiper: thumbsSwiper }}
                   className="swiper mainSwiper"
                 >
-                  {["land1.jpg", "land2.jpg", "land3.jpg", "land4.jpg"].map(
-                    (img, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={`/images/${img}`} alt="Land View" />
-                      </SwiperSlide>
-                    )
+                  {landDetail?.featured_image?.src && (
+                    <SwiperSlide>
+                      <img
+                        src={landDetail.featured_image.src}
+                        alt={landDetail.name}
+                      />
+                    </SwiperSlide>
                   )}
+
+                  {landDetail?.gallery?.map((img: any, index: number) => (
+                    <SwiperSlide key={index}>
+                      <img src={img.src} alt={`gallery ${index}`} />
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
 
                 {/* THUMB SLIDER */}
@@ -46,42 +54,45 @@ const ListingDetail = () => {
                   spaceBetween={10}
                   className="swiper thumbSwiper"
                 >
-                  {["land1.jpg", "land2.jpg", "land3.jpg", "land4.jpg"].map(
-                    (img, index) => (
-                      <SwiperSlide key={index}>
-                        <img src={`/images/${img}`} alt="Thumbnail" />
-                      </SwiperSlide>
-                    )
+                  {landDetail?.featured_image?.src && (
+                    <SwiperSlide>
+                      <img
+                        src={landDetail.featured_image.src}
+                        alt={landDetail.name}
+                      />
+                    </SwiperSlide>
                   )}
-                </Swiper>
 
+                  {landDetail?.gallery?.map((img: any, index: number) => (
+                    <SwiperSlide key={index}>
+                      <img src={img.src} alt={`Thumbnail ${index}`} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
             </div>
 
             {/* PRICE + TITLE */}
             <div className="price-title">
-              <h1>$599,900 · 370m² Lot</h1>
-              <p>Lot 1147, Riverstone Drive, Mulgoa, NSW</p>
+              <h1>
+                {landDetail.name} · {landDetail.price} ·{" "}
+                {landDetail?.attributes?.["Land Size"]?.[0]?.name} Lot
+              </h1>
+              <p>{landDetail.address}</p>
 
               <span className="badge">
-                Everdene Estate — New Release Land in Mulgoa
+                {landDetail.estate?.estate_name} Estate
               </span>
 
               <a href="#" className="view-more">
-                View More Listings in Everdene Estate →
+                View More Listings in {landDetail.estate?.estate_name} Estate →
               </a>
             </div>
 
             {/* OVERVIEW */}
             <div className="content-box">
               <h2>Overview</h2>
-              <p>
-                Secure this premium 370m² lot in the new Everdene Estate, Mulgoa.
-                This flat, fully-serviced block is ready for your dream home,
-                with all essential utilities connected including water, sewer,
-                gas and NBN-ready. Enjoy scenic views of the Blue Mountains and
-                convenient access to local schools, shops, and the M4 Motorway.
-              </p>
+              <p>{landDetail.description}</p>
 
               <h2>Key Features</h2>
               <ul>
@@ -100,7 +111,7 @@ const ListingDetail = () => {
               <div className="lot-section">
                 <div className="map-box">
                   <iframe
-                    src="https://www.google.com/maps?q=Riverstone%20Drive%20Mulgoa%20NSW&output=embed"
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(landDetail?.address)}&output=embed`}
                     width="100%"
                     height="300"
                     style={{ border: 0, borderRadius: "12px" }}
@@ -130,9 +141,7 @@ const ListingDetail = () => {
                 </div>
               </div>
 
-              <h6 className="mt-2">
-                Lot 1147, Riverstone Drive, Mulgoa, NSW
-              </h6>
+              <h6 className="mt-2">{landDetail.address}</h6>
             </div>
 
             {/* LOCATION LINKS */}
@@ -159,7 +168,6 @@ const ListingDetail = () => {
                 </div>
               </div>
             </div> */}
-
           </div>
 
           {/* RIGHT FORM */}
@@ -183,7 +191,6 @@ const ListingDetail = () => {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
