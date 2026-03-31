@@ -20,6 +20,7 @@ export const API_ENDPOINTS = {
   StateBasedRegion: "/state_based_region",
   LandList: "/land_list",
   LandDetail: "/land_detail",
+  EstateDetails: "/estate_details",
 };
 
 export const PRICE_OPTIONS = [

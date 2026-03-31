@@ -1,3 +1,6 @@
+import Estate from "@/components/estate/Estate";
+import { SITE_URL } from "@/config";
+
 type Props = {
   params: Promise<{
     slug: string;
@@ -7,5 +10,9 @@ type Props = {
 export default async function Page({ params }: Props) {
   const { slug } = await params;
 
-  return <h1>Estate</h1>;
+  const res = await fetch(`${SITE_URL}/api/lfs/estate-details?slug=${slug}`);
+
+  const result = await res.json();
+
+  return <Estate estateDetail={result} />;
 }
