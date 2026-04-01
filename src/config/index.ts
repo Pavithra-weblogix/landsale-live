@@ -21,6 +21,8 @@ export const API_ENDPOINTS = {
   LandList: "/land_list",
   LandDetail: "/land_detail",
   EstateDetails: "/estate_details",
+  EnquiryForm:
+    "https://www.landsales.com.au/wp-json/contact-form-7/v1/contact-forms/52118/feedback",
 };
 
 export const PRICE_OPTIONS = [

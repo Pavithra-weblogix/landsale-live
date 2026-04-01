@@ -6,6 +6,7 @@ import { Navigation, Thumbs } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
 import "./landdetails.css";
+import { API_ENDPOINTS } from "@/config";
 
 type Props = {
   landDetail: any;
@@ -13,6 +14,64 @@ type Props = {
 
 const ListingDetail = ({ landDetail }: Props) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: any) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const postData = new FormData();
+
+      postData.append("_wpcf7", "52118");
+      postData.append("_wpcf7_version", "5.9.3");
+      postData.append("_wpcf7_locale", "en_US");
+      postData.append("_wpcf7_unit_tag", "wpcf7-f3290-p45-o1");
+      postData.append("_wpcf7_container_post", "45");
+
+      postData.append("your-name", formData.name);
+      postData.append("your-email", formData.email);
+      postData.append("your-phone", formData.phone);
+
+      postData.append("product-name", landDetail?.name || "");
+      postData.append("product-sku", landDetail?.sku || "");
+      postData.append("product-category", "land");
+      postData.append("product-price", landDetail?.price || "");
+      postData.append("product-url", window.location.href);
+
+      const res = await fetch(API_ENDPOINTS.EnquiryForm, {
+        method: "POST",
+        body: postData,
+      });
+
+      const data = await res.json();
+
+      if (data.status === "mail_sent") {
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+        });
+      } else {
+      }
+    } catch (error) {}
+
+    setLoading(false);
+  };
 
   return (
     <section className="wrapper-layout listing-wrapper section">
@@ -175,11 +234,34 @@ const ListingDetail = ({ landDetail }: Props) => {
             <div className="enquiry-box">
               <h3>Contact us below.</h3>
 
-              <form>
-                <input type="text" placeholder="Name" />
-                <input type="email" placeholder="Email" />
-                <input type="tel" placeholder="Phone" />
-                <button type="submit">Enquire Now</button>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+                <button type="submit" disabled={loading}>
+                  Enquire Now
+                </button>
               </form>
 
               <div className="secure-note">
